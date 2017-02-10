@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>智能滚动条</title>
+		<!--
+			需求：
+			* 滑块控制内容滚动
+			* 滑块长度随着内容长度成反比例变化
+		-->
+		<style type="text/css">
+			body{
+				margin: 0;
+			}
+			#scrollBar{
+				width: 30px;
+				height: 500px;
+				background: #000;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			#slider{
+				width: 30px;
+				height: 30px;
+				background: red;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			#textarea{
+				padding: 0;
+				width: 398px;
+				height: 498px;
+				border: 1px solid #000;
+				position: absolute;
+				left: 34px;
+				top: 0;
+				overflow: hidden;
+			}
+			#content{
+				position: absolute;
+				word-break: break-all;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oScrollBar = document.getElementById('scrollBar');
+				var oSlider = document.getElementById('slider');
+				var oTextarea = document.getElementById('textarea');
+				var oContent = document.getElementById('content');
+				
+				//滑块长度随着内容长度成反比例变化
+				var iMaxContentTop = oTextarea.clientHeight-oContent.scrollHeight;
+				var iScale = oTextarea.clientHeight / oContent.scrollHeight;
+				if (iScale>=1) iScale = 1;
+				oSlider.style.height = oScrollBar.clientHeight*iScale + 'px';
+				
+				var iMaxScrollTop = oScrollBar.clientHeight-oSlider.clientHeight;
+				
+				//滑块控制内容滚动
+				oSlider.onmousedown = function (ev){
+					if (this.setCapture) {
+						this.setCapture();
+					}
+					var ev = ev || event;
+					var disY = ev.clientY - this.offsetTop;
+					document.onmousemove = function (ev){
+						var ev = ev || event;
+						var T = ev.clientY - disY;
+						if (T<0) {
+							T = 0;
+						} else if (T>iMaxScrollTop) {
+							T = iMaxScrollTop;
+						}
+						oSlider.style.top = T + 'px';
+						oContent.style.top = iMaxContentTop*T/iMaxScrollTop + 'px';
+					}
+					document.onmouseup = function (){
+						this.onmousemove = this.onmouseup = null;
+						if (oSlider.releaseCapture) {
+							oSlider.releaseCapture();
+						}
+					}
+					return false;
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div id="scrollBar">
+			<div id="slider"></div>
+		</div>
+		<div id="textarea">
+			<div id="content">析、PC端布局实战、ax数据交互……再到JS的面向对象、JS组件开发、JS模块化开发（seaJS）、正则表达式、Node.js、jQuery库实战教程、JQ源码分析、PC端布局实战、电商网站实战、HTML5+CSS3实战、移动端实战、交互动画教程、前端面试题、CANVAS及游戏、HTML5视频音频、HTML5地理位置信息、HTML5跨文档消息通信、HTML5本地离线存储、数学揭密之【三角函数、球面坐标系、锥面坐标系、柱面坐标系】、JS算法与数据结构、SVG开发、GIT与GITHUB、ANGULAR.JS、BACKBONE、HTML5游戏开发、微析、PC端布局实战、ax数据交互……再到JS的面向对象、JS组件开发、JS模块化开发（seaJS）、正则表达式、Node.js、jQuery库实战教程、JQ源码分析、PC端布局实战、电商网站实战、HTML5+CSS3实战、移动端实战、交互动画教程、前端面试题、CANVAS及游戏、HTML5视频音频、HTML5地理位置信息、HTML5跨文档消息通信、HTML5本地离线存储、数学揭密之【三角函数、球面坐标系、锥面坐标系、柱面坐标系】、JS算法与数据结构、SVG开发、GIT与GITHUB、ANGULAR.JS、BACKBONE、HTML5游戏开发、微析、PC端布局实战、ax数据交互……再到JS的面向对象、JS组件开发、JS模块化开发（seaJS）、正则表达式、Node.js、jQuery库实战教程、JQ源码分析、PC端布局实战、电商网站实战、HTML5+CSS3实战、移动端实战、交互动画教程、前端面试题、CANVAS及游戏、HTML5视频音频、HTML5地理位置信息、HTML5跨文档消息通信、HTML5本地离线存储、数学揭密之【三角函数、球面坐标系、锥面坐标系、柱面坐标系】、JS算法与数据结构、SVG开发、GIT与GITHUB、ANGULAR.JS、BACKBONE、HTML5游戏开发、微析、PC端布局实战、ax数据交互……再到JS的面向对象、JS组件开发、JS模块化开发（seaJS）、正则表达式、Node.js、jQuery库实战教程、JQ源码分析、PC端布局实战、电商网站实战、HTML5+CSS3实战、移动端实战、交互动画教程、前端面试题、CANVAS及游戏、HTML5视频音频、HTML5地理位置信息、HTML5跨文档消息通信、HTML5本地离线存储、数学揭密之【三角函数、球面坐标系、锥面坐标系、柱面坐标系】、JS算法与数据结构、SVG开发、GIT与GITHUB、ANGULAR.JS、BACKBONE、HTML5游戏开发、微析、PC端布局实战、ax数据交互……再到JS的面向对象、JS组件开发、JS模块化开发（seaJS）、正则表达式、Node.js、jQuery库实战教程、JQ源码分析、PC端布局实战、电商网站实战、HTML5+CSS3实战、移动端实战、交互动画教程、前端面试题、CANVAS及游戏、HTML5视频音频、HTML5地理位置信息、HTML5跨文档消息通信、HTML5本地离线存储、数学揭密之【三角函数、球面坐标系、锥面坐标系、柱面坐标系】、JS算法与数据结构、SVG开发、GIT与GITHUB、ANGULAR.JS、BACKBONE、HTML5游戏开发、微析、PC端布局实战、ax数据交互……再到JS的面向对象、JS组件开发、JS模块化开发（seaJS）、正则表达式、Node.js、jQuery库实战教程、JQ源码分析、PC端布局实战、电商网站实战、HTML5+CSS3实战、移动端实战、交互动画教程、前端面试题、CANVAS及游戏、HTML5视频音频、HTML5地理位置信息、HTML5跨文档消息通信、HTML5本地离线存储、数学揭密之【三角函数、球面坐标系、锥面坐标系、柱面坐标系】、JS算法与数据结构、SVG开发、GIT与GITHUB、ANGULAR.JS、BACKBONE、HTML5游戏开发、微析、PC端布局实战、ax数据交互……再到JS的面向对象、JS组件开发、JS模块化开发（seaJS）、正则表达式、Node.js、jQuery库实战教程、JQ源码分析、PC端布局实战、电商网站实战、HT数据结构、SVG开发、GIT与GITHUB、ANGULAR.JS、BACKBONE、HTML5游戏开发、微析、PC端布局标系、柱面坐标系】、JS算法与数据结构、SVG开发、GIT与GITHUB、ANGULAR.JS、BACKBONE、HTML5游戏开发、微析、PC端布局实战、ax数据交互……再到JS的面向对象、JS组件开发、JS模块化开发（seaJS）、正则表达式、Node.js、jQuery库实战教程、JQ源码分析、PC端布局实战、电商网站实战、HTML5+CSS3实战、移动端实战、交互动画教程、前端面试题、CANVAS及游戏、HTML5视频音频、HTML5地理位置信息、HTML5跨文档消息通信、HTML5本地离线存储、数学揭密之【三角函数、球面坐标系、锥面坐标系、柱面坐标系】、JS算法与数据结构、SVG开发、GIT与GITHUB、ANGULAR.JS、BACKBONE、HTML5游戏开发、微信企业网站开发……凡前端开发重要必备知识，这里应有尽有、无所不包！</div>
+		</div>
+	</body>
+</html>

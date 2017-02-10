@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>价格计算</title>
+		<style type="text/css">
+			ul{
+				list-style: none;
+			}
+			.ib{
+				display: inline-block;
+				*display: inline;
+				*zoom: 1;
+				text-align: center;
+			}
+			strong{
+				width: 30px;
+			}
+			em, span{
+				width: 60px;
+			}
+			#count{
+				margin-left: 40px;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oUl = document.getElementById('list');
+				var aLi = oUl.getElementsByTagName('li');
+				
+				var oCou = document.getElementById('count');
+				var aStrong = oUl.getElementsByTagName('strong');
+				var aSpan = oUl.getElementsByTagName('span');
+				var aEm = oUl.getElementsByTagName('em');
+				var num = 0;
+				
+				var arr = [];
+				
+				//利用函数传参复用核心主程序
+				for (var i=0; i<aLi.length; i++) {
+					subAdd(i);
+				}
+				
+				//页脚统计功能
+				function count(){
+					var tnum = 0;
+					var tprice = 0;
+					var max = 0;
+					
+					for (var i=0; i<aStrong.length; i++) {
+						tnum += Number(aStrong[i].innerHTML);
+						tprice += parseFloat(aSpan[i].innerHTML);
+					}
+					for (var i=0; i<aStrong.length; i++) {
+						arr.push(0);
+						if (aStrong[i].innerHTML==0) {
+							arr[i] = 0;
+						} else {
+							arr[i] = parseFloat(aEm[i].innerHTML);
+							if (max<arr[i]) {
+								max = arr[i];
+							}
+						}
+					}
+					
+					oCou.innerHTML = '商品合计共：'+tnum+'件，共花费了：'+tprice+'元<br />其中最贵的商品单价是：'+max+'元';
+				};
+				
+				
+				//核心主程序：加减统计价格，清空
+				function subAdd(n){
+					
+					var oLi = oUl.getElementsByTagName('li')[n];
+					var oSub = oLi.getElementsByTagName('input')[0];
+					var oAdd = oLi.getElementsByTagName('input')[1];
+					var oClear = oLi.getElementsByTagName('input')[2];
+					var oStrong = oLi.getElementsByTagName('strong')[0];
+					var oEm = oLi.getElementsByTagName('em')[0];
+					var oSpan = oLi.getElementsByTagName('span')[0];
+					var num = Number(oStrong.innerHTML);
+					var ep = parseFloat(oEm.innerHTML);
+					
+					oSub.onclick = function (){
+						num --;
+						if (num==-1) {
+							num = 0;
+						} else {
+							oStrong.innerHTML = num;
+							oSpan.innerHTML = num*ep+'元';
+						}
+						count();
+					};
+					oAdd.onclick = function (){
+						num ++;
+						oStrong.innerHTML = num;
+						oSpan.innerHTML = num*ep+'元';
+						count();
+					};
+					oClear.onclick = function (){
+						num = 0;
+						oStrong.innerHTML = num;
+						oSpan.innerHTML = num*ep+'元';
+						count();
+					};
+				};
+				
+			};
+		</script>
+	</head>
+	<body>
+		<ul id="list">
+			<li>
+				<input type="button" value="-"/>
+				<strong class="ib">0</strong>
+				<input type="button" value="+"/>
+				单价：<em class="ib">10元</em>
+				小记：<span class="ib">0元</span>
+				<input type="button" value="清空" />
+			</li>
+			<li>
+				<input type="button" value="-"/>
+				<strong class="ib">0</strong>
+				<input type="button" value="+"/>
+				单价：<em class="ib">9.5元</em>
+				小记：<span class="ib">0元</span>
+				<input type="button" value="清空" />
+			</li>
+			<li>
+				<input type="button" value="-"/>
+				<strong class="ib">0</strong>
+				<input type="button" value="+"/>
+				单价：<em class="ib">12.5元</em>
+				小记：<span class="ib">0元</span>
+				<input type="button" value="清空" />
+			</li>
+			<li>
+				<input type="button" value="-"/>
+				<strong class="ib">0</strong>
+				<input type="button" value="+"/>
+				单价：<em class="ib">15.5元</em>
+				小记：<span class="ib">0元</span>
+				<input type="button" value="清空" />
+			</li>
+			<li>
+				<input type="button" value="-"/>
+				<strong class="ib">0</strong>
+				<input type="button" value="+"/>
+				单价：<em class="ib">6.5元</em>
+				小记：<span class="ib">0元</span>
+				<input type="button" value="清空" />
+			</li>
+		</ul>
+		<div id="count">
+			商品合计共：0件，共花费了：0元<br />
+			其中最贵的商品单价是：0元
+		</div>
+	</body>
+</html>

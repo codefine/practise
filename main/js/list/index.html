@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>简易列表</title>
+		<style type="text/css">
+			body, h2, ul, ol, p{
+				padding: 0;
+				margin: 0;
+			}
+			body{
+				font-family: "微软雅黑";
+			}
+			li{
+				list-style: none;
+			}
+			#box{
+				width: 320px;
+				background: red;
+				border: 1px solid #000000;
+			}
+			.title h2{
+				height: 30px;
+				font-size: 16px;
+				line-height: 30px;
+				text-align: center;
+				color: #fff;
+			}
+			.title ol{
+				height: 20px;
+				font-size: 0;
+				line-height: 20px;
+				text-align: center;
+				border-bottom: 1px solid #fff;
+			}
+			.title li{
+				display: inline-block;
+				*display: inline;
+				*zoom: 1;
+				padding: 0 10px;
+				margin: 0 10px;
+				background: #C0C0C0;
+				font-size: 14px;
+				cursor: pointer;
+			}
+			.title .borderBtm{
+				background: #fff;
+				border-bottom: 1px solid #fff;
+			}
+			ul{
+				height: 340px;
+				background: #fff;
+			}
+			ul li{
+				position: relative;
+				height: 40px;
+				font-size: 14px;
+				line-height: 40px;
+				border-bottom: 1px dashed #000;
+			}
+			ul li:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			ul p{
+				float: left;
+				width: 20px;
+				height: 20px;
+				line-height: 20px;
+				margin: 10px;
+				text-align: center;
+				background: red;
+				color: #fff;
+				border-radius: 10px;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+			}
+			ul img{
+				float: left;
+				width: 70px;
+				height: 70px;
+				border-radius: 40px;
+				-webkit-border-radius: 40px;
+				-moz-border-radius: 40px;
+				margin: 5px 5px 0 0;
+				display: none;
+			}
+			ul span, ul em{
+				float: left;
+			}
+			ul em{
+				font-style: normal;
+				display: none;
+			}
+			ul input{
+				position: absolute;
+				right: 10px;
+				bottom: 10px;
+				display: block;
+				border: none;
+				padding: 5px 10px;
+				background: red;
+				color: #fff;
+				display: none;
+			}
+			ul input:hover{
+				background: #9CCE00;
+			}
+			.hover{
+				height: 80px;
+				background: #CCC;
+			}
+			.footer{
+				height: 30px;
+				padding-right: 10px;
+				line-height: 30px;
+				text-align: right;
+			}
+			.footer a{
+				font-size: 14px;
+				color: #fff;
+				text-decoration: none;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oBox = document.getElementById('box');
+				var aUl = oBox.getElementsByTagName('ul');
+				var oOl = oBox.getElementsByTagName('ol')[0];
+				var aTt = oOl.getElementsByTagName('li');
+				
+				//初始化
+				//隐藏其他ul、显示当前ul
+				for (var i=0; i<aUl.length; i++) {
+					aUl[i].style.display = 'none';
+				}
+				aUl[0].style.display = 'block';
+				aTt[0].className = 'borderBtm';
+				
+				//每日、每周、每月切换
+				for (var i=0; i<aTt.length; i++) {
+					aTt[i].index = i;
+					aTt[i].onmouseover = function (){
+						for (var i=0; i<aUl.length; i++) {
+							aUl[i].style.display = 'none';
+						}
+						aUl[this.index].style.display = 'block';
+						for (var i=0; i<aTt.length; i++) {
+							aTt[i].className = '';
+						}
+						aTt[this.index].className = 'borderBtm';
+					};
+				}
+				
+				
+				//核心主程序复用
+				for (var i=0; i<aUl.length; i++) {
+					fn(i);
+				};
+				
+				function fn(num){
+					var aLi = aUl[num].getElementsByTagName('li');
+					var index = num;
+					var aImg = aUl[num].getElementsByTagName('img');
+					var aSpan = aUl[num].getElementsByTagName('span');
+					var aBtn = aUl[num].getElementsByTagName('input');
+					var aEm = aUl[num].getElementsByTagName('em');
+					
+					for (var i=0; i<aLi.length; i++) {
+						aLi[i].index = i;
+						aLi[i].onmouseover = function (){
+							this.className = 'hover';
+							aImg[this.index].style.display = 'block';
+							aBtn[this.index].style.display = 'block';
+							aSpan[this.index].style.display = 'none';
+							aEm[this.index].style.display = 'block';
+						};
+						aLi[i].onmouseout = function (){
+							this.className = '';
+							aImg[this.index].style.display = 'none';
+							aBtn[this.index].style.display = 'none';
+							aSpan[this.index].style.display = 'block';
+							aEm[this.index].style.display = 'none';
+						};
+					}
+				};
+				
+			};
+		</script>
+	</head>
+	<body>
+		<div id="box">
+			<div class="title">
+				<h2>软件排行榜</h2>
+				<ol>
+					<li>每日</li>
+					<li>每周</li>
+					<li>每月</li>
+				</ol>
+			</div>
+			<ul>
+				<li>
+					<p>1</p>
+					<img src="img/1.jpg" alt="" />
+					<span>Disk Cleaner Suite for Mac 2.2</span>
+					<em>优秀的磁盘垃圾清理工具</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>2</p>
+					<img src="img/2.jpg" alt="" />
+					<span>Google Chrome for Mac 53.0</span>
+					<em>最优秀的浏览器之一</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>3</p>
+					<img src="img/3.jpg" alt="" />
+					<span>Paragon NTFS for Mac 14.2.359</span>
+					<em>解决无法写移动硬盘问题</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>4</p>
+					<img src="img/4.jpg" alt="" />
+					<span>Purrfect Memory for Mac 1.02</span>
+					<em>实用的辅助记忆学习工具</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>5</p>
+					<img src="img/5.jpg" alt="" />
+					<span>Parallels Desktop 12 for Mac 12.0.1</span>
+					<em>支持 macOS Sierra</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>6</p>
+					<img src="img/6.jpg" alt="" />
+					<span>Org Chart Designer Pro 4.0 for Mac</span>
+					<em>优秀的图表设计工具</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>7</p>
+					<img src="img/7.jpg" alt="" />
+					<span>Resize Sense for Mac 2.2</span>
+					<em>图片批量调整大小工具</em>
+					<input type="button" value="详细" />
+				</li>
+			</ul>
+			<ul>
+				<li>
+					<p>1</p>
+					<img src="img/1.jpg" alt="" />
+					<span>Disk Cleaner Suite for Mac 2.2</span>
+					<em>优秀的磁盘垃圾清理工具</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>2</p>
+					<img src="img/2.jpg" alt="" />
+					<span>Google Chrome for Mac 53.0</span>
+					<em>最优秀的浏览器之一</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>3</p>
+					<img src="img/3.jpg" alt="" />
+					<span>Paragon NTFS for Mac 14.2.359</span>
+					<em>解决无法写移动硬盘问题</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>4</p>
+					<img src="img/4.jpg" alt="" />
+					<span>Purrfect Memory for Mac 1.02</span>
+					<em>实用的辅助记忆学习工具</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>5</p>
+					<img src="img/5.jpg" alt="" />
+					<span>Parallels Desktop 12 for Mac 12.0.1</span>
+					<em>支持 macOS Sierra</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>6</p>
+					<img src="img/6.jpg" alt="" />
+					<span>Org Chart Designer Pro 4.0 for Mac</span>
+					<em>优秀的图表设计工具</em>
+					<input type="button" value="详细" />
+				</li>
+			</ul>
+			<ul>
+				<li>
+					<p>1</p>
+					<img src="img/1.jpg" alt="" />
+					<span>Disk Cleaner Suite for Mac 2.2</span>
+					<em>优秀的磁盘垃圾清理工具</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>2</p>
+					<img src="img/2.jpg" alt="" />
+					<span>Google Chrome for Mac 53.0</span>
+					<em>最优秀的浏览器之一</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>3</p>
+					<img src="img/3.jpg" alt="" />
+					<span>Paragon NTFS for Mac 14.2.359</span>
+					<em>解决无法写移动硬盘问题</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>4</p>
+					<img src="img/4.jpg" alt="" />
+					<span>Purrfect Memory for Mac 1.02</span>
+					<em>实用的辅助记忆学习工具</em>
+					<input type="button" value="详细" />
+				</li>
+				<li>
+					<p>5</p>
+					<img src="img/5.jpg" alt="" />
+					<span>Parallels Desktop 12 for Mac 12.0.1</span>
+					<em>支持 macOS Sierra</em>
+					<input type="button" value="详细" />
+				</li>
+			</ul>
+			<div class="footer">
+				<a href="">更多</a>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>CSS3旋转轮播图</title>
+		<style type="text/css">
+			@keyframes show{
+				0%{
+					transform: rotateX(180deg);
+					opacity: 0;
+				}
+				100%{
+					transform: rotateX(0);
+					opacity: 1;
+				}
+			}
+			@keyframes hide{
+				0%{
+					transform: rotateX(0);
+					opacity: 1;
+				}
+				100%{
+					transform: rotateX(-180deg);
+					opacity: 0;
+				}
+			}
+			@keyframes blink{
+				from{
+					background: #000;
+					color: #fff;
+				}
+				to{
+					background: #fff;
+					color: #000;
+				}
+			}
+			.wrap{
+				width: 400px;
+				height: 225px;
+				margin: 100px auto;
+				position: relative;
+			}
+			.imgBox{
+				width: 100%;
+				height: 100%;
+				position: relative;
+				perspective: 800px;
+			}
+			.imgBox img{
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+				transform-origin: bottom;
+				transform: rotateX(180deg);
+				opacity: 0;
+			}
+			.btnBox{
+				width: 100%;
+				height: 50px;
+				line-height: 50px;
+				font-size: 20px;
+				position: absolute;
+				left: 0;
+				top: 50%;
+			}
+			.btnBox span{
+				width: 60px;
+				height: 100%;
+				border-radius: 50%;
+				text-align: center;
+				color: #fff;
+				background: #000;
+				position: absolute;
+				top: -50%;
+				cursor: pointer;
+				-webkit-user-select: none;
+			}
+			.btnBox span:hover{
+				animation: 0.7s blink infinite alternate;
+			}
+			.btnBox span:nth-child(1){
+				left: -80px;
+			}
+			.btnBox span:nth-child(2){
+				right: -80px;
+			}
+			.imgBox img.show{
+				animation: 1s show cubic-bezier(0.8,1.8,0.8,0.8);
+				transform: rotateX(0);
+				opacity: 1;
+			}
+			.imgBox img.hide{
+				animation: 0.8s hide;
+				transform: rotateX(-180deg);
+				opacity: 0;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oImgBox = document.querySelector('.imgBox');
+				var aImg = oImgBox.querySelectorAll('img');
+				var oBtnBox = document.querySelector('.btnBox');
+				var aSpan = oBtnBox.querySelectorAll('span');
+				var iIndex = 0;
+				var aClass = ['hide','show'];
+				
+				function tab(a){
+					aImg[iIndex].className = 'hide';
+					a==0 ? iIndex-- : iIndex++;
+					switch (iIndex) {
+						case -1:
+							iIndex = aImg.length-1;
+							break;
+						case aImg.length:
+							iIndex = 0;
+							break;
+					}
+					aImg[iIndex].className = 'show';
+				}
+				
+				for (var i=0; i<aSpan.length; i++) {
+					(function (a){
+						aSpan[a].onclick = function (){
+							tab(a);
+						}
+					})(i);
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="imgBox">
+				<img src="img/1.jpg" alt="" class="show" />
+				<img src="img/2.jpg" alt="" />
+				<img src="img/3.jpg" alt="" />
+				<img src="img/4.jpg" alt="" />
+				<img src="img/5.jpg" alt="" />
+			</div>
+			<div class="btnBox">
+				<span>PREV</span>
+				<span>NEXT</span>
+			</div>
+		</div>
+	</body>
+</html>

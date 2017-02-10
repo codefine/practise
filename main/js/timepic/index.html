@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>图片版时间</title>
+		<style type="text/css">
+			.box{
+				margin: 200px auto;
+				width: 532px;
+				height: 86px;
+				position: relative;
+				overflow: hidden;
+			}
+			img{
+				width: 61px;
+				height: 86px;
+				margin: 0 1px;
+				position: relative;
+				top: 0;
+			}
+			.box div{
+				position: absolute;
+				left: 0;
+			}
+			#now{
+				top: 0;
+			}
+			#fut{
+				top: 86px;
+			}
+		</style>
+		<script src="codefine.js"></script>
+		<script type="text/javascript">
+		//方法2:判断图片src
+			$(function (){
+				
+				var aImg1 = $('@img',$('#now'));
+				var aImg2 = $('@img',$('#fut'));
+				var onOff = true;
+				
+//				//初始化
+				reset();
+				
+//				//核型主程序执行
+				setInterval(reset,1000);
+				
+//				//冒号闪烁
+				setInterval(function (){
+					if (onOff) {
+						aImg1[2].src = 'img/colon_hide.JPG';
+						aImg1[5].src = 'img/colon_hide.JPG';
+					} else {
+						aImg1[2].src = 'img/colon_show.JPG';
+						aImg1[5].src = 'img/colon_show.JPG';
+					}
+					onOff = !onOff;
+				},500)
+				
+				function reset(){
+					
+					var iHour = Math.floor(new Date().getHours())<10 ? '0'+Math.floor(new Date().getHours()) : ''+Math.floor(new Date().getHours());
+					var iMin = Math.floor(new Date().getMinutes())<10 ? '0'+Math.floor(new Date().getMinutes()) : ''+Math.floor(new Date().getMinutes());
+					var iSec = Math.floor(new Date().getSeconds())<10 ? '0'+Math.floor(new Date().getSeconds()) : ''+Math.floor(new Date().getSeconds());
+					var time = iHour +':'+ iMin +':'+ iSec;
+					
+					//生成图片时间
+					for (var i=0; i<aImg1.length; i++) {
+						if (i==2||i==5) continue;
+						aImg1[i].src = 'img/'+time.charAt(i)+'.jpg';
+						move(i);
+					}
+					
+				}
+				
+				//图片时间运动函数
+				function move(index){
+					if (aImg1[index].src!==aImg2[index].src) {
+						aImg2[index].src = aImg1[index].src;
+						doMove(aImg1[index],'top',10,-86,function (){
+							aImg1[index].style.top = 0;
+						});
+						doMove(aImg2[index],'top',10,-86,function (){
+							aImg2[index].style.top = 0;
+						});
+					}
+				}
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<div id="now">
+				<img src="img/0.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+				<img src="img/colon_show.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+				<img src="img/colon_show.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+			</div>
+			<div id="fut">
+				<img src="img/0.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+				<img src="img/colon_show.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+				<img src="img/colon_show.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+				<img src="img/0.JPG" alt="" />
+			</div>
+		</div>
+	</body>
+</html>

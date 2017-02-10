@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>DOM修改保存</title>
+		<style type="text/css">
+			dl, dd, input{
+				margin: 0;
+				padding: 0;
+			}
+			input{
+				outline: none;
+				border: none;
+				display: inline-block;
+				*display: inline;
+				*zoom: 1;
+				vertical-align: middle;
+				font-size: 0;
+			}
+			dl{
+				width: 500px;
+				background: #fff;
+				border: 1px solid #C0C0C0;
+			}
+			dt{
+				height: 30px;
+				padding-left: 30px;
+				font-size: 16px;
+				line-height: 30px;
+				color: #fff;
+				background: #25D071;
+			}
+			dd{
+				height: 30px;
+				padding-left: 30px;
+				font-size: 14px;
+				line-height: 30px;
+				border-top: 1px solid #C0C0C0;
+			}
+			dd span{
+				display: inline-block;
+				*display: inline;
+				*zoom: 1;
+				vertical-align: middle;
+			}
+			dd img{
+				padding-left: 10px;
+				vertical-align: middle;
+			}
+			.txt{
+				height: 20px;
+				border: 1px solid #5A94EF;
+				font-size: 14px;
+				display: none;
+			}
+			.btn{
+				height: 20px;
+				width: 40px;
+				font-size: 12px;
+				color: #25D071;
+				background: #FFF;
+				display: none;
+			}
+			.btn:hover{
+				color: #fff;
+				background: #25D071;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oDl = document.getElementById('list');
+				var aDd = oDl.getElementsByTagName('dd');
+				
+					for (var i=0; i<aDd.length; i++) {
+						fn(aDd[i]);
+					}
+				
+				function fn(Dd){
+					
+					var oDd = Dd;
+					var oSpan = oDd.getElementsByTagName('span')[0];
+					var oImg = oDd.getElementsByTagName('img')[0];
+					var oTxt = oDd.getElementsByTagName('input')[0];
+					var oSave = oDd.getElementsByTagName('input')[1];
+					var oCancel = oDd.getElementsByTagName('input')[2];
+					
+					function oriShow(){
+						oSpan.style.display = oImg.style.display = 'inline-block';
+					};
+					function oriHide(){
+						oSpan.style.display = oImg.style.display = 'none';
+						oTxt.value = oSpan.innerHTML;
+					};
+					
+					function inputShow(){
+						oTxt.style.display = oSave.style.display = oCancel.style.display = 'inline-block';
+					};
+					function inputHide(){
+						oTxt.style.display = oSave.style.display = oCancel.style.display ='none';
+					};
+					
+					oImg.onclick = function (){
+						oriHide();
+						inputShow();	
+					};
+					
+					oSave.onclick = function (){
+						oSpan.innerHTML = oTxt.value;
+						oriShow();
+						inputHide();
+					};
+					oCancel.onclick = function (){
+						oriShow();
+						inputHide();
+					};
+					
+				};
+				
+			};
+		</script>
+	</head>
+	<body>
+		<dl id="list">
+			<dt>分类名称</dt>
+			<dd>
+				<span>点击铅笔修改文字</span>
+				<img src="img/pen.gif" alt="" />
+				<input class="txt" type="text" />
+				<input class="btn" type="button" value="保存"/>
+				<input class="btn" type="button" value="取消"/>
+			</dd>
+			<dd>
+				<span>点击铅笔修改文字</span>
+				<img src="img/pen.gif" alt="" />
+				<input class="txt" type="text" />
+				<input class="btn" type="button" value="保存"/>
+				<input class="btn" type="button" value="取消"/>
+			</dd>
+			<dd>
+				<span>点击铅笔修改文字</span>
+				<img src="img/pen.gif" alt="" />
+				<input class="txt" type="text" />
+				<input class="btn" type="button" value="保存"/>
+				<input class="btn" type="button" value="取消"/>
+			</dd>
+		</dl>
+	</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		(function (){
+			
+			var oDiv = document.querySelector('div');
+			var dis = {};
+			dis.alreadyShake = false;
+			dis.maxRange = 50;
+			dis.minRange = 5;
+			window.addEventListener('devicemotion',function (e){
+				var gravity = e.accelerationIncludingGravity;
+				var x = Math.round(gravity.x);
+				var y = Math.round(gravity.y);
+				var z = Math.round(gravity.z);
+				if (isAdr()) {
+					x *= -1;
+					y *= -1;
+					z *= -1;
+				}
+				if (typeof dis.x=='undefined'||typeof dis.y=='undefined'||typeof dis.z=='undefined') {
+					dis.x = x;
+					dis.y = y;
+					dis.z = z;
+				}
+				dis.totle = Math.abs(x-dis.x)+Math.abs(y-dis.y)+Math.abs(z-dis.z);
+				if (dis.totle>dis.maxRange) {
+					dis.alreadyShake = true;
+					return;
+				}
+				if (dis.alreadyShake&&dis.totle<dis.minRange) {
+					dis.alreadyShake = false;
+					//摇一摇执行动作
+					alert('摇一摇');
+				}
+				dis.x = x;
+				dis.y = y;
+				dis.z = z;
+			});
+			
+		})();
+		function isAdr(){
+			var u = navigator.userAgent;
+			return u.indexOf('Android')>-1 || u.indexOf('Adr')>-1;
+		}
+	</script>
+</html>

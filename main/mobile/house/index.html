@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<style type="text/css">
+			body{
+				margin: 0;
+			}
+			html,
+			body{
+				height: 100%;
+				overflow: hidden;
+				position: relative;
+			}
+			ul{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			.wrap{
+				width: 0;
+				height: 0;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				-webkit-perspective: 300px;
+				perspective: 300px;
+			}
+			.z{
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+			}
+			.box{
+				margin: -512px 0 0 -512px;
+				width: 1024px;
+				height: 1024px;
+				position: relative;
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+			}
+			.box>li{
+				width: 1024px;
+				height: 1024px;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			.box>li:nth-child(1){
+				background: url(img/neg-x.png) no-repeat;
+				-webkit-transform: rotateY(0) translateZ(-511px);
+				transform: rotateY(0) translateZ(-511px);
+			}
+			.box>li:nth-child(2){
+				background: url(img/neg-z.png) no-repeat;
+				-webkit-transform: rotateY(90deg) translateZ(-511px);
+				transform: rotateY(90deg) translateZ(-511px);
+			}
+			.box>li:nth-child(3){
+				background: url(img/pos-x.png) no-repeat;
+				-webkit-transform: rotateY(180deg) translateZ(-511px);
+				transform: rotateY(180deg) translateZ(-511px);
+			}
+			.box>li:nth-child(4){
+				background: url(img/pos-z.png) no-repeat;
+				-webkit-transform: rotateY(270deg) translateZ(-511px);
+				transform: rotateY(270deg) translateZ(-511px);
+			}
+			.box>li:nth-child(5){
+				background: url(img/neg-y.png) no-repeat;
+				-webkit-transform: rotateX(90deg) translateZ(-511px);
+				transform: rotateX(90deg) translateZ(-511px);
+			}
+			.box>li:nth-child(6){
+				background: url(img/pos-y.png) no-repeat;
+				-webkit-transform: rotateX(-90deg) translateZ(-511px);
+				transform: rotateX(-90deg) translateZ(-511px);
+			}
+		</style>
+		<script src="MTween.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			document.addEventListener('touchstart',function (e){
+				e.preventDefault();
+			});
+			window.onload = function (){
+				
+				var oWrap = document.querySelector('.wrap');
+				var oZ = document.querySelector('.z');
+				var oBox = document.querySelector('.box');
+				css(oZ,'translateZ',300);
+				mRotate({
+					el: oZ
+				});
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="z">
+				<ul class="box">
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>

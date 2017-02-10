@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>延迟导航</title>
+		<style type="text/css">
+			body, ul{
+				margin: 0;
+				padding: 0;
+			}
+			ul{
+				margin: 100px auto;
+				width: 520px;
+				height: 20px;
+				padding: 7px 0;
+				font-size: 14px;
+				background: url(img/ul_bg.png) repeat-x;
+				border: 1px solid #21639c;
+				border-radius: 5px;
+				-webkit-border-radius: 5px;
+				-moz-border-radius: 5px;
+			}
+			ul:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			li{
+				height: 20px;
+				line-height: 20px;
+				list-style: none;
+				float: left;
+				padding: 0 16px;
+				border-right: 1px solid #E4FFFF;
+				position: relative;
+			}
+			li a{
+				padding: 4px 14px;
+				text-decoration: none;
+				color: #fff;
+				border-radius: 5px;
+				-webkit-border-radius: 5px;
+				-moz-border-radius: 5px;
+			}
+			.active{
+				background: url(img/hover.png) repeat-x;
+			}
+			li div{
+				height: 24px;
+				position: absolute;
+				top: 30px;
+				padding-top: 8px;
+			}
+			li div:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			.index{
+				width: 277px;
+				padding-left: 18px;
+				background: url(img/li_bg1.png) no-repeat;
+				left: 0;
+				display: none;
+			}
+			.about{
+				width: 292px;
+				padding-left: 18px;
+				background: url(img/li_bg2.png) no-repeat;
+				left: -2px;
+				display: none;
+			}
+			.art{
+				width: 262px;
+				padding-left: 18px;
+				background: url(img/li_bg3.png) no-repeat;
+				left: -101px;
+				display: none;
+			}
+			.blog{
+				width: 342px;
+				padding-left: 18px;
+				background: url(img/li_bg4.png) no-repeat;
+				left: -102px;
+				display: none;
+			}
+			li span{
+				float: left;
+				padding: 0 8px;
+				border-right: 1px solid #7b5ab5;
+				font-size: 12px;
+				line-height: 18px;
+				color: #215a9c;
+				cursor: pointer;
+			}
+			li span:hover{
+				text-decoration: underline;
+			}
+			.noBorder{
+				border-right: none;
+			}
+			.more{
+				float: right;
+				border-right: none;
+			}
+		</style>
+		<script src="codefine.js"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var timer = null;
+				var oldLi = null; //本题难点:需通过该变量通过作用域链传递进入timer的function中
+				
+				for (var i=0; i<$('@li').length-1; i++) {
+					$('@li')[i].onmouseover = function (){
+						clearTimeout(timer);
+						//a标签active先重置后生效
+						$('@a',oldLi)[0].className = '';
+						$('@a',this)[0].className = 'active';
+						//二级标签先隐藏后显示
+						$('@div',oldLi)[0].style.display = 'none';
+						$('@div',this)[0].style.display = 'block';
+						oldLi = this;
+					};
+					$('@li')[i].onmouseout = function (){
+						timer = setTimeout(function (){
+							$('@a',oldLi)[0].className = '';
+							$('@div',oldLi)[0].style.display = 'none';
+						},1500)
+					};
+				}
+				
+			})
+		</script>
+	</head>
+	<body>
+		<ul>
+			<li>
+				<a href="#">首页</a>
+				<div class="index">
+					<span>最新更新</span>
+					<span>活动</span>
+					<span>报名试听</span>
+					<span class="noBorder">学员反馈</span>
+				</div>
+			</li>
+			<li>
+				<a href="#">关于我们</a>
+				<div class="about">
+					<span>妙味讲师</span>
+					<span>培训方式</span>
+					<span>培训理念</span>
+					<span class="noBorder">联系我们</span>
+				</div>
+			</li>
+			<li>
+				<a href="#">作品</a>
+				<div class="art">
+					<span>般固</span>
+					<span>MATRIX</span>
+					<span>留学e网</span>
+					<span class="noBorder">ECMall</span>
+				</div>
+			</li>
+			<li class="noBorder">
+				<a href="#">博客</a>
+				<div class="blog">
+					<span>JS教程</span>
+					<span>弹出层效果</span>
+					<span>3D球面标签云</span>
+					<span class="noBorder">Window计算器</span>
+				</div>
+			</li>
+			<li class="more">
+				<a href="#">>>更多</a>
+			</li>
+		</ul>
+	</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<style type="text/css">
+			body {
+				margin: 0;
+			}
+			
+			html,
+			body {
+				height: 100%;
+				position: relative;
+				overflow: hidden;
+			}
+			
+			header,
+			footer {
+				width: 100%;
+				line-height: 50px;
+				text-align: center;
+				background: #000;
+				font-size: 20px;
+				color: #FFFFFF;
+				position: absolute;
+			}
+			
+			header {
+				top: 0;
+			}
+			
+			footer {
+				bottom: 0;
+			}
+			
+			section {
+				width: 100%;
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 50px;
+				bottom: 50px;
+				overflow: hidden;
+			}
+			
+			ul {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			
+			li {
+				line-height: 30px;
+				font-size: 16px;
+				text-indent: 10px;
+				border-bottom: 1px dotted #000;
+			}
+		</style>
+		<script src="MTween.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function() {
+
+				var oUl = document.querySelector('ul');
+				var oFooter = document.querySelector('footer');
+
+				createList(oUl);
+				mScroll({
+					el: oUl,
+					useBar: 'ctrl'
+				});
+				oFooter.addEventListener('touchstart', function(e) {
+					alert(1);
+				});
+
+			}
+			document.addEventListener('touchstart', function(e) {
+				e.preventDefault();
+			});
+
+			function createList(obj) {
+				var strList = '';
+				for(var i = 0; i < 100; i++) {
+					strList += '<li>这是第' + i + '个列表</li>';
+				}
+				obj.innerHTML = strList;
+			}
+		</script>
+	</head>
+
+	<body>
+		<header>这是头部</header>
+		<section>
+			<ul></ul>
+		</section>
+		<footer>这是尾部</footer>
+	</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>放大镜</title>
+		<style type="text/css">
+			body{
+				margin: 0;
+			}
+			#ori{
+				width: 240px;
+				height: 135px;
+				border: 1px solid #000000;
+				cursor: move;
+				position: relative;
+			}
+			#ori img{
+				width: 240px;
+			}
+			#magni{
+				width: 400px;
+				height: 400px;
+				margin-top: 10px;
+				border: 1px solid #000000;
+				overflow: hidden;
+				display: none;
+				position: relative;
+			}
+			#magni img{
+				position: absolute;
+			}
+			.block{
+				width: 50px;
+				height: 50px;
+				background: blue;
+				opacity: 0.5;
+				filter: alpha(opacity:50);
+				position: absolute;
+				display: none;
+			}
+		</style>
+		<script src="jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var iScale = 1920/$('#ori').width();
+				
+				$('#ori').mousemove(function (ev){
+					var L = ev.pageX - 25;
+					if (L<0) {
+						L = 0;
+					} else if (L>$('#ori').width()-$('.block').width()) {
+						L = $('#ori').width()-$('.block').width();
+					}
+					var T = ev.pageY - 25;
+					if (T<0) {
+						T = 0;
+					} else if (T>$('#ori').height()-$('.block').height()) {
+						T = $('#ori').height()-$('.block').height();
+					}
+					$('.block').css({
+						'display': 'block',
+						'left': L,
+						'top': T
+					})
+					$('#magni').css('display','block');
+					$('#magni>img').css({
+						'left': -L*iScale,
+						'top': -T*iScale
+					})
+					
+				})
+				$('#ori').mouseout(function (){
+					$('.block').css('display','none');
+					$('#magni').css('display','none');
+				})	
+				
+			})
+		</script>
+	</head>
+	<body>
+		<div id="ori">
+			<img src="magni.jpg" />
+			<div class="block"></div>
+		</div>
+		<div id="magni">
+			<img src="magni.jpg" />
+		</div>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>拖拽回放</title>
+		<!--
+       		需求：
+       		* 点击回放按钮，元素按照原先拖拽轨迹移动
+        -->
+        <style type="text/css">
+        		body{
+        			margin: 0;
+        		}
+        		div{
+        			width: 100px;
+        			height: 100px;
+        			background: #FF7700;
+        			position: absolute;
+        			left: 100px;
+        			top: 100px;
+        		}
+        </style>
+        <script type="text/javascript">
+        		window.onload = function (){
+        			
+        			var oBtn = document.getElementById('btn1');
+        			var oDiv = document.getElementById('div1');
+        			
+        			//创建轨迹记录变量
+        			var pos = {
+        					'step':0,
+        					'left':[],
+        					'top':[]
+        				};
+        			
+        			oDiv.onmousedown = function (ev){
+        				if (this.setCapture) {
+        					this.setCapture();
+        				}
+        				
+        				var ev = ev || event;
+        				var disX = ev.clientX - this.offsetLeft;
+        				var disY = ev.clientY - this.offsetTop;
+        				document.onmousemove = function (ev){
+        					var ev = ev || event;
+        					var L = ev.clientX - disX;
+        					var T = ev.clientY - disY;
+        					
+        					//轨迹记录
+        					pos.step ++;
+        					pos.left.push(L);
+        					pos.top.push(T);
+        					
+        					oDiv.style.left = L + 'px';
+        					oDiv.style.top = T + 'px';
+        				}
+        				document.onmouseup = function (){
+        					this.onmousemove = this.onmouseup = null;
+        					if (oDiv.releaseCapture) {
+        						oDiv.releaseCapture();
+        					}
+        				}
+        				return false;
+        			}
+        			
+        			//按钮点击后回放定时器回放轨迹
+        			oBtn.onclick = function (){
+        				if (pos.step==0) return;
+        				clearInterval(this.timer);
+        				this.timer = setInterval(function (){
+        					pos.step --;
+        					oDiv.style.left = pos.left[pos.step] + 'px';
+        					oDiv.style.top = pos.top[pos.step] + 'px';
+        					if (pos.step==0) {
+        						clearInterval(oBtn.timer);
+        						pos = {
+		        					'step':0,
+		        					'left':[],
+		        					'top':[]
+		        				};
+        					}
+        				},14);
+        			}
+        			
+        		}
+        </script>
+	</head>
+	<body>
+		点击方块拖拽，点击回放后方块按照原轨迹返回
+		<input id="btn1" type="button" value="回放" />
+		<div id="div1"></div>
+	</body>
+</html>

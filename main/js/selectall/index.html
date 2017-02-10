@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>全选</title>
+		<style type="text/css">
+		 	body, ul, input{
+		 		margin: 0;
+		 		padding: 0;
+		 		font-size: 14px;
+		 		font-family: Lantinghei SC;
+		 	}
+		 	li{
+		 		list-style: none;
+		 	}
+		 	input{
+		 		outline: none;
+		 	}
+		 	.box{
+		 		margin: 100px auto;
+		 		width: 312px;
+		 	}
+		 	li{
+		 		height: 32px;
+		 		line-height: 30px;
+		 		padding-left: 16px;
+		 		border-bottom: 1px solid #fff;
+		 	}
+		 	li:hover{
+		 		background: #ccc;
+		 	}
+		 	li input{
+		 		margin-right: 16px;
+		 	}
+		 	li span{
+		 		display: inline-block;
+		 		*display: inline;
+		 		*zoom: 1;
+		 		width: 160px;
+		 	}
+		 	li em{
+		 		font-style: normal;
+		 	}
+		 	form{
+		 		height: 31px;
+		 		line-height: 31px;
+		 		padding-left: 16px;
+		 		border-bottom: 2px solid #9C949C;
+		 		background: #fff;
+		 		font-size: 0;
+		 		background: url(img/2_btm_bg.png) repeat-x;
+		 	}
+		 	form span{
+		 		font-size: 14px;
+		 		margin: 0 16px 0 18px;
+		 	}
+		 	.btn{
+		 		width: 65px;
+		 		height: 25px;
+		 		margin: 0 4px;
+		 		text-indent: 1em;
+		 		border: 1px solid #CCCCCC;
+		 		border-radius: 4px;
+		 		-moz-border-radius: 4px;
+		 		-webkit-border-radius: 4px;
+		 		cursor: pointer;
+		 	}
+		 	.collect{
+		 		background: url(img/2_collect.png) no-repeat 8px center;
+		 	}
+		 	.add{
+		 		background: url(img/2_add.png) no-repeat 8px center;
+		 	}
+		 	.delete{
+		 		background: url(img/2_delete.png) no-repeat 8px center;
+		 	}
+		 	.bgc{
+		 		background: #e4ffff;
+		 	}
+		 	.gray{
+		 		background: #ccc;
+		 	}
+		 </style>
+		 <script type="text/javascript">
+		 	window.onload = function (){
+		 		
+		 		var oUl = document.getElementsByTagName('ul')[0];
+		 		var aCheckbox = oUl.getElementsByTagName('input');
+		 		var aLi = document.getElementsByTagName('li');
+		 		var oForm = document.getElementsByTagName('form')[0];
+	 			var aBtn = oForm.getElementsByTagName('input');
+	 			var sum = 0;
+		 		
+		 		//功能按钮禁用与解除
+		 		function fnBtn(boolean){
+		 			for (var i=1; i<aBtn.length; i++) {
+		 				aBtn[i].disabled = boolean;
+		 			}
+		 		}
+		 		fnBtn(true);
+		 		
+		 		function checked(target){
+	 				//点击选项，目标li颜色变换
+	 				if (target.checked) {
+	 					if (sum==aCheckbox.length) {
+	 						sum = aCheckbox.length;
+	 					} else {
+	 						sum += 1;
+	 					}
+		 				aLi[target.index].className = 'gray';
+		 			} else {
+		 				if (sum==0) {
+	 						sum = 0;
+	 					} else {
+	 						sum -= 1;
+	 					}
+		 				if (target.index%2==0) {
+		 					aLi[target.index].className = 'bgc';
+		 				} else {
+		 					aLi[target.index].className = '';
+		 				}
+		 			}
+	 				//选择对应的全选、功能按钮的禁用与解禁
+	 				if (sum==aCheckbox.length) {
+	 					fnBtn(false);
+	 					aBtn[0].checked = true;
+	 				} else if (sum==0) {
+	 					fnBtn(true);
+	 					aBtn[0].checked = false;
+	 				} else {
+	 					fnBtn(false);
+	 					aBtn[0].checked = false;
+	 				}
+	 			}
+		 		
+		 		//核心主程序
+		 		for (var i=0; i<aCheckbox.length; i++) {
+		 			aCheckbox[i].index = i;
+		 			sum += Number(aCheckbox[i].checked);
+		 			aCheckbox[i].onclick = function (){
+		 				checked(this);
+		 			};
+		 		}
+		 		
+		 		//全选控制
+		 		aBtn[0].onclick = function (){
+		 			for (var i=0; i<aCheckbox.length; i++) {
+		 				if (sum==aCheckbox.length&&aCheckbox[i].checked==true) {
+		 					for (var i=0; i<aCheckbox.length; i++) {
+			 					aCheckbox[i].checked = false;
+			 					checked(aCheckbox[i]);
+			 				}
+		 				} else {
+		 					for (var i=0; i<aCheckbox.length; i++) {
+			 					aCheckbox[i].checked = true;
+			 					checked(aCheckbox[i]);
+		 					}
+		 				}
+		 			}
+		 		};
+		 		
+		 	};
+		 </script>
+	</head>
+	<body>
+		<div class="box">
+			<ul>
+				<li class="bgc">
+					<input type="checkbox" />
+					<span>私奔</span>
+					<em>梁博</em>
+				</li>
+				<li>
+					<input type="checkbox" />
+					<span>北京北京</span>
+					<em>梁博，黄勇</em>
+				</li>
+				<li class="bgc">
+					<input type="checkbox" />
+					<span>我爱你中国</span>
+					<em>梁博</em>
+				</li>
+				<li>
+					<input type="checkbox" />
+					<span>花火</span>
+					<em>梁博</em>
+				</li>
+				<li class="bgc">
+					<input type="checkbox" />
+					<span>回来</span>
+					<em>梁博</em>
+				</li>
+				<li>
+					<input type="checkbox" />
+					<span>爱要有你才完美</span>
+					<em>梁博，那英</em>
+				</li>
+			</ul>
+			<form action="">
+				<input type="checkbox" />
+				<span>全选</span>
+				<input class="btn collect" type="button" value="收藏"/>
+				<input class="btn add" type="button" value="添加"/>
+				<input class="btn delete" type="button" value="删除"/>
+			</form>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>手风琴效果</title>
+		<style type="text/css">
+			body, ul{
+				margin: 0;
+			}
+			li{
+				list-style: none;
+				width: 400px;
+				height: 400px;
+				position: absolute;
+				left: 0;
+			}
+		</style>
+		<script src="jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var aColor = ['red','blue','green','yellow','pink'];
+				
+				$('li').each(function (i,elem){
+					$(elem).css('background',''+aColor[i]+'')
+				})
+				
+				$('li:first').nextAll().each(function (i,elem){
+					$(elem).css({
+						'width': 50,
+						'left': 400+i*50
+					})
+				})
+				
+				$('li').click(function (){
+					$(this).animate({
+						'width': 400,
+						'left': $(this).index()*50
+					})
+					$(this).prevAll().each(function (){
+						$(this).animate({
+							'width': 50,
+							'left': $(this).index()*50
+						})
+					})
+					$(this).nextAll().each(function (){
+						$(this).animate({
+							'width': 50,
+							'left': 400 + ($(this).index()-1)*50
+						})
+					})
+				})
+				
+			})
+		</script>
+	</head>
+	<body>
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</body>
+</html>

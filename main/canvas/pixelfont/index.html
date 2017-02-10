@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Canvas像素显字</title>
+		<style type="text/css">
+			#canv{
+				border: 1px solid #000000;
+			}
+			ul{
+				width: 400px;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				text-align: center;
+			}
+			li{
+				display: inline-block;
+				margin-right: 5px;
+				font-size: 50px;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var aLi = document.querySelectorAll('li');
+				var oC = document.querySelector('#canv');
+				oGC = oC.getContext('2d');
+				var timer = null;
+				
+				for (var i=0; i<aLi.length; i++) {
+					
+					aLi[i].onclick = function (){
+						
+						//画布初始化
+						clearInterval(timer);
+						var num = 0;
+						oGC.clearRect(0,0,oC.width,oC.height);
+						
+						/*基础字体绘制*/
+						var str = this.innerHTML; //取字
+						var h = 200; //定义字高
+						oGC.font = h+'px simsan'; //字体设置
+						var w = oGC.measureText(str).width; //取字宽
+						oGC.textBaseline = 'middle'; //定义基线
+						oGC.textAlign = 'center'; //定义对其方式
+						//线性渐变填充
+						var oColor = oGC.createLinearGradient((oC.width-w)/2,(oC.height-h)/2,(oC.width-w)/2+w,(oC.height-h)/2+h); 
+						oColor.addColorStop(0,'yellow');
+						oColor.addColorStop(1,'red');
+						oGC.fillStyle = oColor;
+						//绘制文字
+						oGC.fillText(str,oC.width/2,oC.height/2);
+						
+						/*提取文字像素*/
+						var oldText = oGC.getImageData((oC.width-w)/2,(oC.height-h)/2,w,h); //提取像素
+						oGC.clearRect(0,0,oC.width,oC.height);
+						//绘制像素
+						var aTextPixel = randomArr(w*h,w*h/20); //随机抽取像素
+						var newText = oGC.createImageData(w,h); //创建新像素
+						
+						timer = setInterval(function (){
+							
+							//逐像素克隆像素
+							for (var i=0; i<aTextPixel[num].length; i++) {
+								newText.data[4*aTextPixel[num][i]] = oldText.data[4*aTextPixel[num][i]];
+								newText.data[4*aTextPixel[num][i]+1] = oldText.data[4*aTextPixel[num][i]+1];
+								newText.data[4*aTextPixel[num][i]+2] = oldText.data[4*aTextPixel[num][i]+2];
+								newText.data[4*aTextPixel[num][i]+3] = oldText.data[4*aTextPixel[num][i]+3];
+							}
+							//绘制新像素
+							oGC.putImageData(newText,(oC.width-w)/2,(oC.height-h)/2);
+							
+							if (num==19) {
+								clearInterval(timer);
+								num = 0;
+							} else {
+								num ++;
+							}
+							
+						},100);
+						
+					}
+					
+				}
+				
+				//复合随机数组
+				function randomArr(iAll,iLen){
+					
+					var arr = [];
+					var allArr = [];
+					
+					for (var i=0; i<iAll; i++) {
+						arr.push(i);
+					}
+					
+					for (var i=0; i<iAll/iLen; i++) {
+						var newArr = [];
+						for (var j=0; j<iLen; j++) {
+							newArr.push( arr.splice( Math.round( Math.random()*arr.length), 1) );
+						}
+						allArr.push(newArr);
+					}
+					
+					return allArr;
+					
+				}
+					
+				
+			}
+		</script>
+	</head>
+	<body>
+		<canvas id="canv" width="400" height="400"></canvas>
+		<ul id="list">
+			<li>像</li>
+			<li>素</li>
+			<li>显</li>
+			<li>字</li>
+		</ul>
+	</body>
+</html>

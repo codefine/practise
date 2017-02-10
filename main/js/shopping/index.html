@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>限时抢购</title>
+		<style type="text/css">
+			h2, ul, p, input{
+				margin: 0;
+				padding: 0;
+			}
+			a{
+				text-decoration: none;
+			}
+			img{
+				vertical-align: top;
+				border: none;
+			}
+			li{
+				list-style: none;
+			}
+			.box{
+				margin: 0 auto;
+				width: 648px;
+				font: 14px/20px lantinghei SC;
+			}
+			h2{
+				line-height: 30px;
+			}
+			h2 span{
+				font-size: 16px;
+			}
+			#up{
+				border-top: 4px solid #EF9400;
+				background: url(img/shop_cd.png) repeat-x;
+			}
+			#up ul{
+				height: 280px;
+				text-align: center;
+			}
+			#up ul:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			#up li{
+				width: 160px;
+				height: 280px;
+				margin: 0 1px;
+				background: #fff;
+				float: left;
+				position: relative;
+				top: 0;
+				left: 0;
+			}
+			#up .time{
+				width: 90px;
+			}
+			#up .sub{
+				padding: 0 8px;
+				border: none;
+				background: #fff;
+				color: #9CCE00;
+			}
+			#up p{
+				font-size: 16px;
+				line-height: 30px;
+				color: gray;
+			}
+			#up a{
+				color: #5A94EF;
+			}
+			#up a strong{
+				font-weight: normal;
+			}
+			#up img{
+				width: 160px;
+				padding: 10px 0 18px;
+			}
+			#up span{
+				display: block;
+				font-size: 16px;
+				color: crimson;
+			}
+			#down{
+				padding-top: 20px;
+			}
+			#down p, #sum{
+				background: #EF9400;
+				font-size: 16px;
+				line-height: 28px;
+			}
+			#down p span{
+				margin: 0 80px;
+				color: #fff;
+			}
+			#down li{
+				height: 100px;
+				line-height: 100px;
+				background: #E4FFFF;
+				margin: 4px 0;
+				text-align: center;
+			}
+			#down li:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			#down li span{
+				float: left;
+				display: block;
+				width: 184px;
+			}
+			#down li strong{
+				float: left;
+				display: block;
+				width: 220px;
+			}
+			#down img{
+				float: right;
+				width: 80px;
+				padding: 10px 20px 0 0;;
+			}
+			#sum{
+				color: #fff;
+				text-indent: 200px;
+			}
+			#sum em{
+				color: #fff;
+				font-weight: bold;
+				font-style: normal;
+			}
+			#sum span{
+				color: red;
+				font-weight: bold;
+			}
+		</style>
+		<script src="codefine.js"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var oUp = $('#up');
+				var aUpLi = $('@li',oUp);
+				var timer = null;
+				var arrLi = [];
+				var piece = 0;
+				
+				for (var i=0; i<aUpLi.length; i++) {
+					$('@input',aUpLi[i])[1].index = i;
+					$('@input',aUpLi[i])[1].onclick = function (){
+						var n = this.index;
+						arrLi.push('<li><span>'+$('@strong',aUpLi[n])[0].innerHTML+'</span><strong>'+$('@span',aUpLi[n])[0].innerHTML+'</strong><img src="'+$('@img',aUpLi[n])[0].src+'" alt="" /></li>');
+						timer = setInterval(function (){
+							var iNow = new Date();
+							var iFut = new Date($('@input',aUpLi[n])[0].value);
+							var t = Math.floor((iFut-iNow)/1000);
+							var cd = (Math.floor(t%86400/3600)<10 ? '0'+Math.floor(t%86400/3600) : ''+Math.floor(t%86400/3600))+'小时'+(Math.floor(t%86400%3600/60)<10 ? '0'+Math.floor(t%86400%3600/60) : ''+Math.floor(t%86400%3600/60))+'分钟'+((t%60)<10 ? '0'+(t%60) : ''+(t%60))+'秒';
+							$('@p',aUpLi[n])[0].innerHTML = cd;
+							if (t==0) {
+								shake(aUpLi[n],'left',function (){
+									doMove(aUpLi[n],'top',10,200);
+									opacity(aUpLi[n],10,0,function (){
+										aUpLi[n].style.display = 'none';
+										$('@ul',$('#down'))[0].innerHTML += arrLi[n];
+										piece += parseFloat($('@span',aUpLi[n])[0].innerHTML.replace('¥',''));
+										$('@span',$('#sum'))[0].innerHTML = '¥' + piece;
+									});
+								});
+							}
+						},1000);
+					};
+				}
+				
+			})
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<h2>限时抢购<span>(在商品上方输入时间(需领先与当前时间)，然后点击确定)</span></h2>
+			<div id="up">
+				<ul>
+					<li>
+						<input class="time" type="text" value="October 4,2016 18:10:00"/>
+						<input class="sub" type="button" value="确定"/>
+						<p>00小时00分钟00秒</p>
+						<a href="#">
+							<img src="img/shop_1.png" alt="" />
+							<strong>如7而至，火爆发售</strong>
+						</a>
+						<span>¥7888.12</span>
+					</li>
+					<li>
+						<input class="time" type="text" value="October 4,2016 18:10:00"/>
+						<input class="sub" type="button" value="确定"/>
+						<p>00小时00分钟00秒</p>
+						<a href="#">
+							<img src="img/shop_2.png" alt="" />
+							<strong>三星note7，旗舰机型</strong>
+						</a>
+						<span>¥5888.33</span>
+					</li>
+					<li>
+						<input class="time" type="text" value="October 4,2016 18:10:00"/>
+						<input class="sub" type="button" value="确定"/>
+						<p>00小时00分钟00秒</p>
+						<a href="#">
+							<img src="img/shop_3.png" alt="" />
+							<strong>新款iWatch</strong>
+						</a>
+						<span>¥2488.55</span>
+					</li>
+					<li>
+						<input class="time" type="text" value="October 4,2016 18:10:00"/>
+						<input class="sub" type="button" value="确定"/>
+						<p>00小时00分钟00秒</p>
+						<a href="#">
+							<img src="img/shop_4.png" alt="" />
+							<strong>布鲁雅尔sense</strong>
+						</a>
+						<span>¥6999.22</span>
+					</li>
+				</ul>
+			</div>
+			<div id="down">
+				<p>
+					<span>商品</span>
+					<span>价格</span>
+				</p>
+				<ul></ul>
+				<div id="sum">
+					<em>总价：</em>
+					<span></span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

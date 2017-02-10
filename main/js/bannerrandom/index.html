@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>随机轮播LOGO广告</title>
+		<style type="text/css">
+			ul{
+				width: 300px;
+				height: 300px;
+				margin: 200px auto;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+				float: left;
+				height: 100px;
+				width: 100px;
+				overflow: hidden;
+			}
+			div{
+				position: relative;
+				left: 0;
+				top: 0;
+			}
+			img{
+				border: none;
+				vertical-align: top;
+				border-radius: 20px;
+				-moz-border-radius: 20px;
+				-webkit-border-radius: 20px;
+			}
+		</style>
+		<script type="text/javascript" src="codefine.js"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var json = {
+					'aUrl1': ['img/3_1_1.gif', 'img/3_1_2.gif', 'img/3_1_3.gif'],
+					'aUrl2': ['img/3_2_1.gif', 'img/3_2_2.gif', 'img/3_2_3.gif', 'img/3_2_4.gif'],
+					'aUrl3': ['img/3_3_1.gif', 'img/3_3_2.gif', 'img/3_3_3.gif', 'img/3_3_4.gif'],
+					'aUrl4': ['img/3_4_1.gif', 'img/3_4_2.gif'],
+					'aUrl5': ['img/3_5_1.gif', 'img/3_5_2.gif', 'img/3_5_3.gif'],
+					'aUrl6': ['img/3_6_1.gif', 'img/3_6_2.gif', 'img/3_6_3.gif'],
+					'aUrl7': ['img/3_7_1.gif', 'img/3_7_2.gif'],
+					'aUrl8': ['img/3_8_1.gif', 'img/3_8_2.gif', 'img/3_8_3.gif', 'img/3_8_4.gif'],
+					'aUrl9': ['img/3_9_1.gif', 'img/3_9_2.gif', 'img/3_9_3.gif'],
+				};
+				
+				var aDiv = $('@div');
+				var num = 0;
+				var timer = null;
+				
+				for (var attr in json) {
+					var str = '';
+					for (var j in json[attr]) {
+						str += '<img src="'+json[attr][j]+'">';
+					}
+					aDiv[num].innerHTML = str;
+					num ++;
+				}
+				
+				timer = setInterval(function (){
+					var _this = aDiv[randomInt(0,aDiv.length-1)];
+					var aImg = $('@img',_this);
+					doMove(_this,'top',10,-100*randomInt(0,aImg.length-1));
+				},randomInt(500,1000));
+				
+			})
+		</script>
+	</head>
+	<body>
+		<ul>
+			<li>
+				<div></div>
+			</li>
+			<li>
+				<div></div>
+			</li>
+			<li>
+				<div></div>
+			</li>
+			<li>
+				<div></div>
+			</li>
+			<li>
+				<div></div>
+			</li>
+			<li>
+				<div></div>
+			</li>
+			<li>
+				<div></div>
+			</li>
+			<li>
+				<div></div>
+			</li>
+			<li>
+				<div></div>
+			</li>
+		</ul>
+	</body>
+</html>

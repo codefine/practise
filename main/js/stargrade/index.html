@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>星级评分</title>
+		<style type="text/css">
+			body, dl, dd{
+				margin: 0;
+				padding: 0;
+			}
+			img{
+				border: none;
+				vertical-align: middle;
+			}
+			.box{
+				margin: 100px auto;
+				width: 550px;
+				position: relative;
+			}
+			dl{
+				height: 40px;
+				padding: 10px;
+				line-height: 40px;
+				border: 1px solid #000;
+			}
+			dt{
+				float: left;
+			}
+			span{
+				color: red;
+			}
+			dd{
+				float: left;
+				font-size: 0;
+			}
+			dd img{
+				width: 20px;
+				height: 22px;
+				padding: 0 1px;
+				cursor: pointer;
+			}
+			.pos{
+				position: absolute;
+				left: 220px;
+			}
+			em{
+				height: 40px;
+				padding: 10px;
+				line-height: 40px;
+				font-style: normal;
+				font-weight: bold;
+				color: #E67902;
+				top: 0;
+			}
+			#info{
+				width: 240px;
+				height: 40px;
+				background: url(img/1_info.png);
+				top: 10px;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oDd = document.getElementsByTagName('dd')[0];
+				var aImg = document.getElementsByTagName('img');
+				var len = aImg.length;
+				var oEm = document.getElementsByTagName('em')[0];
+				var oInfo = document.getElementById('info');
+				var aTxt = ['很差', '较差', '还行', '推荐', '力推'];
+				var aUrl = ['img/1_star_normal.png', 'img/1_star_gray.png', 'img/1_star_yellow.png'];
+				var onOff = true;
+				var str = '';
+				
+				//评价and提示的显示or隐藏
+				oDd.onmouseover = function (){
+					oInfo.style.display = 'none';
+				};
+				oDd.onmouseout = function (){
+					if (onOff) {
+						oInfo.style.display = 'block';
+					} else {
+						oInfo.style.display = 'none';
+					}
+				};
+				
+				//星级and评价初始化
+				function reset(){
+					for (var i=0; i<len; i++) {
+						aImg[i].src = 'img/1_star_normal.png';
+					}
+				}
+				
+				//星级高亮and评价变化
+				function change(index){
+					oEm.innerHTML = aTxt[index];
+					if (index<2) {
+						for (var i=0; i<index+1; i++) {
+							aImg[i].src = aUrl[1];
+						}
+					} else {
+						for (var i=0; i<index+1; i++) {
+							aImg[i].src = aUrl[2];
+						}
+					}
+				}
+				
+				//核心主程序
+				for (var i=0; i<len; i++) {
+					aImg[i].index = i;
+					aImg[i].onclick = function (){
+						change(this.index);
+						onOff = false;
+						str = this.index;
+					};
+					aImg[i].onmouseover = function (){
+						reset();
+						change(this.index);
+					};
+					//鼠标移出效果
+					aImg[i].onmouseout = function hide(){
+						reset();
+						if (!onOff) {
+							change(str);
+						}
+					};
+				}
+				
+			};
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<dl>
+				<dt>
+					<span>*</span>
+					总体评价：
+				</dt>
+				<dd>
+					<img src="img/1_star_normal.png" alt="" />
+					<img src="img/1_star_normal.png" alt="" />
+					<img src="img/1_star_normal.png" alt="" />
+					<img src="img/1_star_normal.png" alt="" />
+					<img src="img/1_star_normal.png" alt="" />
+				</dd>
+			</dl>
+			<em class="pos">推荐</em>
+			<div id="info" class="pos"></div>
+		</div>
+	</body>
+</html>

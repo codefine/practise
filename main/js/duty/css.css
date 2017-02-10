@@ -1,0 +1,57 @@
+@charset "UTF-8";
+/* CSS Document */
+body {font-size: 14px;}
+body ul {margin: 0; padding: 0;}
+li {list-style:none;}
+
+#container {
+	margin: 100px auto 0;
+	width: 1000px;
+}
+
+#header {
+	height: 35px; border-bottom: 2px solid #EE7510;
+}
+#header li {
+	float: left; padding: 0 10px; margin-right: 5px;
+	height: 35px;
+	line-height: 35px; font-size: 18px; cursor: pointer;
+}
+#header li.focus {
+	background-color: #EE7510;
+	color: white; font-weight: bold;
+}
+
+.list {
+	margin-top: 5px;
+}
+.list li {
+	position: relative;
+	height: 35px;
+	line-height: 35px; font-size: 16px;
+}
+.list li a {
+	display : inline-block;
+	height: 35px;
+}
+.list .date {
+	position: absolute; right: 0;
+	line-height: 35px;
+}
+
+#tips {
+	padding: 5px; position: absolute; left: 0px; top: 0px;
+	width: 400px; display: none;
+	border: 2px solid #FF7700; background-color: white;
+}
+#tips li.col {
+	width: 200px; height: 30px; float: left;
+	line-height: 30px; border-bottom: 1px solid #CCC;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#arrow {
+	position: absolute; left: -11px;
+	width: 11px; height: 17px; background: url("arrow.png") no-repeat;
+}

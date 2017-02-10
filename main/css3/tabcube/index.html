@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>CSS3立方体轮播图</title>
+		<style type="text/css" id="css">
+			ul, ol{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			p{
+				margin: 0;
+				padding: 0;
+			}
+			.box{
+				width: 800px;
+				padding: 100px;
+				border: 4px solid #000000;
+				position: relative;
+				margin: 100px auto;
+			}
+			.imgList{
+				width: 800px;
+				height: 450px;
+				perspective: 3000px;
+			}
+			.imgList li{
+				float: left;
+				width: 50px;
+				height: 450px;
+				position: relative;
+				transform-style: preserve-3d;
+				transform-origin: center center -225px;
+			}
+			.imgList li p, .imgList li span{
+				width: 50px;
+				height: 450px;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			.imgList li p:nth-of-type(1){
+				background: url(img/1.jpg);
+			}
+			.imgList li p:nth-of-type(2){
+				background: url(img/2.jpg);
+				top: -450px;
+				transform-origin: bottom;
+				transform: rotateX(90deg);
+			}
+			.imgList li p:nth-of-type(3){
+				background: url(img/3.jpg);
+				transform: translateZ(-450px) rotateX(180deg);
+			}
+			.imgList li p:nth-of-type(4){
+				background: url(img/4.jpg);
+				top: 450px;
+				transform-origin: top;
+				transform: rotateX(-90deg);
+			}
+			.imgList li span{
+				width: 450px;
+				background: #333;
+			}
+			.imgList li span:nth-of-type(1){
+				transform-origin: left;
+				transform: rotateY(90deg);
+			}
+			.imgList li span:nth-of-type(2){
+				left: 50px;
+				transform-origin: left;
+				transform: rotateY(90deg);
+			}
+			.btnList{
+				width: 1000px;
+				height: 50px;
+				line-height: 50px;
+				text-align: center;
+				font-size: 40px;
+				position: absolute;
+				left: 0;
+				bottom: 15px;
+			}
+			.btnList li{
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				margin: 0 20px;
+				background: #ccc;
+				color: orangered;
+				display: inline-block;
+			}
+			.btnList .active{
+				background: orangered;
+				color: #ccc;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oImgList = document.querySelector('.imgList');
+				var oCss = document.querySelector('#css');
+				var sCss = '';
+				var sLi = '';
+				var iWidth = 50;
+				var iLen = oImgList.clientWidth/iWidth;
+				var iZIndex = 0;
+				
+				//初始化
+				for (var i=0; i<iLen; i++) {
+					//生成子立方体
+					sLi += '<li><p></p><p></p><p></p><p></p><span></span><span></span></li>';
+					//设定子立方体位置
+					sCss += '.imgList li:nth-of-type('+(i+1)+') p{background-position-x: -'+i*iWidth+'px;}';
+					//修正视觉层级
+					i<iLen/2 ? iZIndex++ : iZIndex--;
+					sCss += '.imgList li:nth-of-type('+(i+1)+'){z-index: '+iZIndex+';}';
+				}
+				oImgList.innerHTML = sLi;
+				oCss.innerHTML += sCss;
+				
+				//控制逻辑
+				var oBtnList = document.querySelector('.btnList');
+				var aLi = oImgList.querySelectorAll('li');
+				var aBtn = oBtnList.querySelectorAll('li');
+				var lastActive = 0;
+				
+				for (var i=0; i<aBtn.length; i++) {
+					(function (a){
+						aBtn[a].onclick = function (){
+							for (var i=0; i<aLi.length; i++) {
+								//旋转子立方体到对应的面
+								aLi[i].style.transform = 'rotateX(-'+a*90+'deg)';
+								//子立方体延迟旋转
+								aLi[i].style.transition = '1s '+i*100+'ms';
+							}
+							//按钮响应
+							aBtn[lastActive].className = '';
+							this.className = 'active';
+							lastActive = a;
+						}
+					})(i);
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<ul class="imgList"></ul>
+			<ol class="btnList">
+				<li class="active">1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+			</ol>
+		</div>
+	</body>
+</html>

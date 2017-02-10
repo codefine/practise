@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>查找替换</title>
+		<style type="text/css">
+			dl, dd, input, p{
+				padding: 0;
+				margin: 0;
+			}
+			input{
+				outline: none;
+				border: none;
+			}
+			.box{
+				width: 500px;
+				position: relative;
+			}
+			#area, #fn{
+				padding: 10px;
+				border: 6px solid #ccc;
+			}
+			#area{
+				height: 300px;
+				background: #E4FFFF;
+				margin-bottom: 10px;
+			}
+			#fn{
+				height: 100px;
+				background: #EFEFEF;
+				display: none;
+			}
+			.title:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			.title{
+				padding-left: 10px;
+				border-bottom: 4px solid #000;
+			}
+			.title p{
+				float: left;
+				padding: 0 10px;
+				background: #E4FFFF;
+				font-size: 18px;
+				line-height: 30px;
+				font-weight: bold;
+				margin-right: 6px;
+			}
+			.title .right{
+				float: right;
+				background: #000;
+				color: #fff;
+				font-weight: normal;
+			}
+			#fn form{
+				margin-top: 20px;
+				padding: 10px;
+				text-align: left;
+			}
+			#fn input{
+				height: 20px;
+				font-size: 14px;
+				line-height: 20px;
+			}
+			#fn .txt{
+				text-indent: 4px;
+			}
+			#fn .btn{
+				padding: 0 10px;
+				color: #E67902;
+				background: none;
+			}
+			.active, #fn .active{
+				background: #000;
+				color: #E4FFFF;
+			}
+			.box dl{
+				width: 80px;
+				position: absolute;
+				top: 0;
+				right: -100px;
+				font-size: 18px;
+				line-height: 30px;
+				text-align: center;
+				background: #E4FFFF;
+				border: 6px solid #ccc;
+				color: #333;
+			}
+			.box dd{
+				display: none;
+			}
+			#fn .search{
+				display: block;
+			}
+			#fn .replace{
+				display: none;
+			}
+			span{
+				background: yellow;
+			}
+		</style>
+		<script type="text/javascript" src="codefine.js"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var str = '近日，有网友曝光一组十年前曹云金和郭德纲的旧照，一时引发网友热议。从照片中可以看出，那个时候，郭德纲很年轻，曹云金还十分青涩。德云社的生活环境并不是很好，作为学徒的曹云金穿着朴素，一伙人桌子上只有三个菜。但是，在这样的环境中，师徒好似一家人。两个人吃大锅饭，喝一碗粥。<br />近日，有网友曝光一组十年前曹云金和郭德纲的旧照，一时引发网友热议。从照片中可以看出，那个时候，郭德纲很年轻，曹云金还十分青涩。德云社的生活环境并不是很好，作为学徒的曹云金穿着朴素，一伙人桌子上只有三个菜。但是，在这样的环境中，师徒好似一家人。两个人吃大锅饭，喝一碗粥。';
+				var oArea = $('#area');
+				var oDt = $('@dt')[0];
+				var aDd = $('@dd');
+				var onOff = true;
+				var oFn = $('#fn');
+				var aP = $('@p');
+				var aForm = $('@form');
+				var aInp = $('@input');
+				var aSpan = $('@span');
+				
+				oArea.innerHTML = str;
+				
+				//展开收缩
+				oDt.onclick = function (){
+					oDt.innerHTML = onOff ? '收起' : '展开';
+					for (var i=0; i<aDd.length; i++) {
+						aDd[i].style.display = onOff ? 'block' : 'none';
+					}
+					onOff = !onOff;
+				};
+				
+				for (var i=0; i<aForm.length; i++) {
+					aDd[i].index = aP[i].index = i;
+					//展开后控制搜索框
+					aDd[i].onclick = function (){
+						clear(this.index);
+						for (var i=0; i<aDd.length; i++) {
+							aDd[i].style.display = 'none';
+						}
+						oDt.innerHTML = '展开';
+						onOff = true;
+					};
+					//搜索框中的标签控制
+					aP[i].onclick = function (){
+						clear(this.index);
+					}
+				}
+				
+				//关闭搜索框
+				aP[2].onclick = function (){
+					oFn.style.display = 'none';
+					str = oArea.innerHTML;
+					clearVal();
+					for (var i=0; i<aForm.length; i++) {
+						aForm[i].style.display = 'none';
+						aDd[i].className = 'none';
+						aP[i].className = 'none';
+					}
+					for (var i=0; i<aSpan.length; i++) {
+						aSpan[i].style.background = 'none';
+					}
+				};
+				
+				//查找
+				aInp[1].onclick = function (){
+					oArea.innerHTML = str;
+					var newSea = aInp[0].value;
+					if (aInp[0].value==='') {
+						alert('请输入需要查找的内容');
+						return;
+					} else if (oArea.innerHTML.indexOf(newSea)===-1) {
+						alert('没有查找到相关内容');
+						aInp[0].value = '';
+						return;
+					}
+					oArea.innerHTML = oArea.innerHTML.split(newSea).join('<span>'+newSea+'</span>');
+				};
+				
+				//替换
+				aInp[4].onclick = function (){
+					str = oArea.innerHTML;
+					var newSea = aInp[2].value;
+					var newRep = aInp[3].value;
+					if (aInp[2].value==='') {
+						alert('请输入需要替换的内容');
+						return;
+					} else if (oArea.innerHTML.indexOf(newSea)===-1) {
+						alert('没有查找到相关内容');
+						aInp[2].value = '';
+						return;
+					}
+					oArea.innerHTML = oArea.innerHTML.split(newSea).join('<span>'+newRep+'</span>');
+					clearVal();
+				};
+				
+				function clear(index){
+					for (var i=0; i<aForm.length; i++) {
+						aForm[i].style.display = 'none';
+						aDd[i].className = 'none';
+						aP[i].className = 'none';
+					}
+					for (var i=0; i<aSpan.length; i++) {
+						aSpan[i].style.background = 'none';
+					}
+					aDd[index].className = 'active';
+					aP[index].className = 'active';
+					aForm[index].style.display = 'block';
+					oFn.style.display = 'block';
+					
+				}
+				
+				function clearVal(){
+					for (var i=0; i<aInp.length; i++) {
+						aInp[i].value = '';
+					}
+					aInp[1].value = '查找';
+					aInp[4].value = '替换';
+				};
+				
+			})
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<div id="area"></div>
+			<div id="fn">
+				<div class="title">
+					<p>查找</p>
+					<p>替换</p>
+					<p class="right">X</p>
+				</div>
+				<form class="search" action="">
+					<input class="txt" type="text" />
+					<input class="btn" type="button" value="查找"/>
+				</form>
+				<form class="replace" action="">
+					<input class="txt" type="text" />
+					<input class="txt" type="text" />
+					<input class="btn" type="button" value="替换"/>
+				</form>
+			</div>
+			<dl>
+				<dt>展开</dt>
+				<dd>查找</dd>
+				<dd>替换</dd>
+			</dl>
+		</div>
+	</body>
+</html>

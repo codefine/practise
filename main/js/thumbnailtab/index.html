@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>缩略图轮播图</title>
+		<style type="text/css">
+			body, ul, h2{
+				margin: 0;
+				padding: 0;
+			}
+			img{
+				border: none;
+				vertical-align: top;
+			}
+			li{
+				list-style: none;
+			}
+			a{
+				text-decoration: none;
+			}
+			#box{
+				width: 900px;
+				margin: 100px auto;
+				background: #333;
+				position: relative;
+			}
+			#box h2{
+				height: 40px;
+				font-size: 20px;
+				line-height: 40px;
+				text-align: center;
+				color: #fff;
+			}
+			#main{
+				width: 800px;
+				margin: 0 auto;
+				border: 2px solid #9C949C;
+				position: relative;
+			}
+			#main img{
+				width: 800px;
+				height: 450px;
+				background: url(img/loader_ico.gif) no-repeat center #fff;
+			}
+			#btnL, #btnR{
+				width: 50px;
+				height: 50px;
+				border-radius: 25px;
+				-webkit-border-radius: 25px;
+				-moz-border-radius: 25px;
+				background: #E67902;
+				font-size: 30px;
+				line-height: 50px;
+				text-align: center;
+				font-weight: bold;
+				color: #fff;
+				position: absolute;
+				top: 200px;
+				filter: alpha(opacity:30);
+				opacity: 0.3;
+			}
+			#btnL:hover, #btnR:hover{
+				filter: alpha(opacity:100);
+				opacity: 1;
+			}
+			#btnL{
+				left: 30px;
+			}
+			#btnR{
+				right: 30px;
+			}
+			#list{
+				height: 40px;
+				padding-top: 10px;
+				left: 360px;
+				text-align: center;
+				font-size: 0;
+			}
+			#list:after{
+				content: "";
+				display: block;
+				color: both;
+			}
+			#list li{
+				display: inline-block;
+				*display: inline;
+				*zoom: 1;
+				width: 30px;
+				height: 30px;
+				margin-right: 8px;
+				border-radius: 15px;
+				-webkit-border-radius: 15px;
+				-moz-border-radius: 15px;
+				background: #9C949C;
+				position: relative;
+			}
+			#list .active{
+				background: #E67902;
+			}
+			#list li img{
+				width: 160px;
+				height: 90px;
+				padding: 2px 2px 10px 2px ;
+				background: url(img/2_thumbnail_bg.gif);
+				position: absolute;
+				top: -100px;
+				left: -70px;
+				display: none;
+			}
+			.radius{
+				border-radius: 50px;
+				-webkit-border-radius: 50px;
+				-moz-border-radius: 50px;
+			}
+			.radius1{
+				border-radius: 10px;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+			}
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var	oMain = document.getElementById('main');
+					oImg = oMain.getElementsByTagName('img')[0];
+					oBtnL = document.getElementById('btnL');
+					oBtnR = document.getElementById('btnR');
+					oUl = document.getElementById('list');
+					aLi = oUl.getElementsByTagName('li');
+					aVi = oUl.getElementsByTagName('img');
+					aUrl = ['img/1.jpg', 'img/2.jpg', 'img/3.jpg', 'img/4.jpg', 'img/5.jpg'];
+					num = 0;
+					len = aUrl.length;
+					str = '';
+					index = 0;
+					oldActive = '';
+					
+				//初始化
+				oImg.src = aUrl[num];
+				for (var i=0; i<len; i++) {
+					str += '<li><img class="radius1" src="'+aUrl[i]+'" alt="" /></li>';
+				}
+				oUl.innerHTML = str;
+				aLi[num].className = 'active';
+				
+				//左右按钮切换
+				oldActive = aLi[num];
+				function fnTab(){
+					oImg.src = aUrl[num];
+					//对应按钮高亮显示
+					aLi[num].className = 'active';
+					oldActive.className = '';
+					oldActive = aLi[num];
+				};
+				oBtnL.onclick = function (){
+					num --;
+					if (num==-1) {
+						num = len-1;
+					}
+					fnTab();
+				};
+				oBtnR.onclick = function (){
+					num ++;
+					if (num==len) {
+						num = 0;
+					}
+					fnTab();
+				};
+				
+				//li控制切换
+				oldActive = aLi[this.index];
+				for (var i=0; i<len; i++) {
+					aLi[i].index = i;
+					aLi[i].onclick = function (){
+						num = this.index;
+						oImg.src = aUrl[this.index];
+						oldActive.className = '';
+						oldActive = this;
+						this.className = 'active';
+					};
+					//li显示缩略图
+					aLi[i].onmouseover = function (){
+						aVi[this.index].style.display = 'block';
+					};
+					aLi[i].onmouseout = function (){
+						aVi[this.index].style.display = 'none';
+					};
+				}
+				
+			};
+		</script>
+	</head>
+	<body>
+		<div id="box" class="radius">
+			<h2>带缩略图的图片切换</h2>
+			<div id="main" class="radius">
+				<img class="radius" src="" alt="" />
+				<a id="btnL" href="#"><</a>
+				<a id="btnR" href="#">></a>
+			</div>
+			<ul id="list"></ul>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>CSS3时钟</title>
+		<style id="css">
+			body{
+				font-family: lantinghei SC;
+			}
+			ul{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			.clock{
+				width: 400px;
+				border: 4px solid #000;
+				border-radius: 50%;
+				position: relative;
+				margin: 200px auto;
+			}
+			.face{
+				height: 400px;
+				position: relative;
+			}
+			.millisecond, .second{
+				width: 200px;
+				height: 50px;
+				line-height: 50px;
+				text-align: center;
+				font-size: 30px;
+				color: #000;
+				position: absolute;
+				top: -60px;
+				cursor: pointer;
+			}
+			.millisecond{
+				right: 0;
+				transition: 1s;
+			}
+			.second{
+				left: 0;
+				color: rgba(255,255,255,0);
+				background: -webkit-linear-gradient(-30deg,rgba(0,0,0,1) 0,rgba(0,0,0,1) 200px,rgba(255,0,0,1) 200px,rgba(255,0,0,1) 230px,rgba(0,0,0,1) 230px,rgba(0,0,0,1) 460px) no-repeat -220px 0;
+				-webkit-background-size: 460px 50px;
+				background-size: 460px 50px;
+				-webkit-background-clip: text;
+				background-clip: -webkit-text;
+				
+				transition: 2s;
+			}
+			.second:hover{
+				color: rgba(0,0,0,0);
+				background-position: 0 0;
+			}
+			.millisecond:hover{
+				color: #fff;
+				text-shadow: 0 0 10px rgba(0,0,255,1);
+			}
+			.face li{
+				width: 4px;
+				height: 15px;
+				background: #CCC;
+				position: absolute;
+				left: 198px;
+				top: 0;
+				transform-origin: center 200px;
+				z-index: 0;
+			}
+			.face li:nth-of-type(5n+1){
+				height: 20px;
+				background: #000;
+				z-index: 1;
+			}
+			.sec{
+				width: 4px;
+				height: 150px;
+				background: red;
+				position: absolute;
+				left: 198px;
+				top: 50px;
+				transform-origin: center bottom;
+				border-radius: 50%;
+			}
+			.min{
+				width: 6px;
+				height: 125px;
+				background: blue;
+				position: absolute;
+				left: 197px;
+				top: 75px;
+				transform-origin: center bottom;
+				border-radius: 50%;
+			}
+			.hour{
+				width: 8px;
+				height: 100px;
+				background: blueviolet;
+				position: absolute;
+				left: 196px;
+				top: 100px;
+				transform-origin: center bottom;
+				border-radius: 50%;
+			}
+			.center{
+				width: 30px;
+				height: 30px;
+				background: rgba(0,0,0,0.7);
+				border-radius: 50%;
+				position: absolute;
+				left: 185px;
+				top: 185px;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oFace = getClass('face');
+				var oSec = getClass('sec');
+				var oMin = getClass('min');
+				var oHour = getClass('hour');
+				var oMSecBtn = getClass('millisecond');
+				var oSecBtn = getClass('second');
+				var timer = null;
+				
+				//type=0 秒级经典时钟
+				//type=1 毫秒级无声时钟
+				var type = 0;
+				
+				//生成时间刻度
+				for (var i=0; i<60; i++) {
+					var oLi = document.createElement('li');
+					oLi.style.transform = 'rotate('+6*i+'deg)';
+					oFace.appendChild(oLi);
+				}
+				
+				//生成环绕罗马数字时间
+				var oCss = document.getElementById('css');
+				var aLi = oFace.getElementsByTagName('li');
+				var strAfter = '';
+				var romanNum = [];
+				for (var i=0; i<12; i++) {
+					romanNum.push(String.fromCharCode(i+8544));
+				}
+				romanNum.unshift(romanNum.pop());
+				
+				for (var i=0; i<aLi.length; i+=5) {
+					aLi[i].className = 'num'+i/5+'';
+					strAfter += '.num'+i/5+':after{content:"'+romanNum[i/5]+'";position:absolute;left:-8px;top:22px;font-size:20px;font-weight:bold;transform:rotate('+-i*6+'deg);}';
+				}
+				oCss.innerHTML += strAfter;
+				
+				getTimeMove(type);
+				timer = setInterval(function (){
+					getTimeMove(type);
+				},1);
+				
+				oSecBtn.onclick = function (){
+					type = 0;
+				}
+				oMSecBtn.onclick = function (){
+					type = 1;
+				}
+				
+				//时间函数
+				function getTimeMove(type){
+					
+					var iNow = new Date();
+					var iNSec = iNow.getSeconds();
+					var iSec = type==0 ? iNow.getSeconds() : iNow.getTime()%(1000*60);
+					var iMin = iNow.getMinutes()+iNSec/60;
+					var iHour = iNow.getHours()+iMin/60;
+					
+					oSec.style.transform = 'rotate('+(type==0?iSec*6:iSec*6/1000)+'deg)';
+					oMin.style.transform = 'rotate('+iMin*6+'deg)';
+					oHour.style.transform = 'rotate('+iHour*30+'deg)';
+					
+				}
+
+				//低配版获取class
+				function getClass(iClass){
+					
+					var iEls = document.body.getElementsByTagName('*');
+					
+					for (var i=0; i<iEls.length; i++) {
+						if (iEls[i].className==iClass) {
+							return iEls[i];
+						}
+					}
+					
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div class="clock">
+			<div class="second">经典时钟</div>
+			<div class="millisecond">无声时钟</div>
+			<ul class="face"></ul>
+			<div class="sec"></div>
+			<div class="min"></div>
+			<div class="hour"></div>
+			<div class="center"></div>
+		</div>
+	</body>
+</html>

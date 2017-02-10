@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>CSS3折纸列表</title>
+		<style type="text/css">
+			@keyframes open{
+				0%{
+					transform: rotateX(-120deg);
+					background: black;
+				}
+				25%{
+					transform: rotateX(6deg);
+					background: orange;
+				}
+				50%{
+					transform: rotateX(-3deg);
+					background: orange;
+				}
+				75%{
+					transform: rotateX(1deg);
+					background: orange;
+				}
+				100%{
+					transform: rotateX(0);
+					background: orange;
+				}
+			}
+			@keyframes close{
+				0%{
+					transform: rotateX(0);
+					background: orange;
+				}
+				100%{
+					transform: rotateX(-120deg);
+					background: black;
+				}
+			}
+			h2{
+				padding: 0;
+				margin: 0;
+			}
+			.wrap{
+				width: 240px;
+				text-align: center;
+				color: #fff;
+				perspective: 800px;
+				position: relative;
+				left: 50px;
+				top: 50px;
+			}
+			.wrap h2{
+				width: 100%;
+				height: 40px;
+				line-height: 40px;
+				background: #32CD32;
+				font-size: 20px;
+				position: relative;
+				z-index: 20;
+				transform: scale(0.962) translateZ(30px);
+			}
+			.wrap div{
+				width: 100%;
+				height: 30px;
+				line-height: 30px;
+				font-size: 16px;
+				background: black;
+				transform-origin: top;
+				position: absolute;
+				left: 0;
+				top: 31px;
+				perspective: 800px;
+				transform-style: preserve-3d;
+				transform: rotateX(-120deg);
+			}
+			.wrap>div{
+				top: 40px;
+			}
+			.wrap .open{
+				animation: 2s open;
+				transform: rotateX(0);
+				background: orange;
+			}
+			.wrap .close{
+				animation: 2s close;
+				transform: rotateX(-120deg);
+				background: black;
+			}
+			.btn{
+				width: 50px;
+				height: 50px;
+				background: #32CD32;
+				color: #fff;
+				border-radius: 50%;
+				position: absolute;
+				left: 350px;
+				top: 50px;
+				font-size: 16px;
+				font-weight: bold;
+				line-height: 50px;
+				text-align: center;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oBtn = document.querySelector('.btn');
+				var oWrap = document.querySelector('.wrap');
+				var aDiv = oWrap.querySelectorAll('div');
+				var onOff = true;
+				var i = 0;
+				
+				oBtn.onclick = function (){
+					
+					if (oBtn.timer) return;
+					
+					if (onOff) {
+						oBtn.timer = setInterval(function (){
+							aDiv[i].className = 'open';
+							i++;
+							if (i>aDiv.length-1) {
+								i = aDiv.length-1;
+								clearInterval(oBtn.timer);
+								addAnimationEnd(aDiv[aDiv.length-1],close);
+							}
+						},120)
+					} else {
+						oBtn.timer = setInterval(function (){
+							aDiv[i].className = 'close';
+							i--;
+							if (i<0) {
+								i = 0;
+								clearInterval(oBtn.timer);
+								addAnimationEnd(aDiv[aDiv.length-1],open);
+							}
+						},120)
+					}
+				}
+				
+				function close(){
+					removeAnimationEnd(aDiv[aDiv.length-1],close);
+					oBtn.innerHTML = '收缩';
+					oBtn.style.background = '#FFA500';
+					oBtn.timer = null;
+					onOff = false;
+				}
+				function open(){
+					removeAnimationEnd(aDiv[aDiv.length-1],open);
+					oBtn.innerHTML = '展开';
+					oBtn.style.background = '#32CD32';
+					oBtn.timer = null;
+					onOff = true;
+				}
+				
+				function addAnimationEnd(obj,fn){
+					obj.addEventListener('animationend',fn,false);
+				}
+				function removeAnimationEnd(obj,fn){
+					obj.removeEventListener('animationend',fn,false);
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div class="btn">展开</div>
+		<div class="wrap">
+			<h2>折纸列表</h2>
+			<div>
+				<span>列表1</span>
+				<div>
+					<span>列表2</span>
+					<div>
+						<span>列表3</span>
+						<div>
+							<span>列表4</span>
+							<div>
+								<span>列表5</span>
+								<div>
+									<span>列表6</span>
+									<div>
+										<span>列表7</span>
+										<div>
+											<span>列表8</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

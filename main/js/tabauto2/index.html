@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>自动轮播图</title>
+		<style type="text/css">
+			.box{
+				margin: 200px auto;
+				width: 500px;
+				height: 300px;
+				padding: 4px;
+				background: #fff;
+				border: 8px solid #E67902;
+				font-family: Lantinghei SC;
+			}
+			dl{
+				margin: 0;
+				padding: 0;
+				position: relative;
+				width: 500px;
+				height: 300px;
+				overflow: hidden;
+			}
+			dt{
+				width: 1000px;
+			}
+			dt:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			dt a{
+				position: absolute;
+			}
+			#a1{
+				left: 0;
+				top: 0;
+			}
+			#a2{
+				left: 500px;
+				top: 0;
+			}
+			dt img{
+				border: none;
+				vertical-align: top;
+				width: 500px;
+				height: 300px;
+			}
+			dd{
+				margin: 0;
+				padding: 0;
+				width: 500px;
+				height: 80px;
+				background: rgba(0,0,0,0.5);
+				/*  RGBA兼容IE方法 
+					 	#AABBBBBB
+						 	AA为透明度,对应关系如下
+							 	透明度	AA值
+							 	0.1     19
+							 	0.2     33
+							 	0.3     4C
+							 	0.4     66
+							 	0.5     7F
+							 	0.6     99
+							 	0.7     B2
+							 	0.8     C8
+							 	0.9     E5
+							BBBBBB为十六进制颜色值(一定要与rgb颜色相同)
+				*/
+				filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000,endColorstr=#7F000000);
+				position: absolute;
+				bottom: -80px;
+				left: 0;
+				color: #fff;
+				text-align: center;
+			}
+			dd h2{
+				margin: 0;
+				padding: 0;
+				padding-top: 14px;
+				font-size: 20px;
+			}
+			dd span{
+				font-size: 16px;
+			}
+		</style>
+		<script src="codefine.js"></script>
+		<script type="text/javascript">
+			$(function (){
+				var aTxt = [ ['《辣爸影视成绩单》','《宫锁沉香》','《金蝉脱壳》','《扫毒》','《谁说我们不会爱》','《书书书》','《花鸟虫鱼》'], ['辣爸影视成绩单辣爸影视成绩单','宫锁沉香宫锁沉香宫锁沉香','金蝉脱壳金蝉脱壳金蝉脱壳','扫毒扫毒扫毒扫毒扫毒扫毒','谁说我们不会爱谁说我们不会爱','书书书书书书书书书','花鸟虫鱼花鸟虫鱼花鸟虫鱼'] ];
+				var len = aTxt[0].length;
+				var aUrl = [];
+					for (var i=0; i<len; i++){
+						aUrl.push('img/4_'+(i+1)+'.jpg');
+					}
+				var aImg = $('@img');
+				var oH2 = $('@h2')[0];
+				var oSpan = $('@span')[0];
+				var oA1 = $('#a1');
+				var oA2 = $('#a2');
+				var oDt = $('@dt')[0];
+				var oDd = $('@dd')[0];
+				var timer = null;
+				
+				//功能变量
+				var onOff = true;
+				var num = 0;
+				
+				//初始化
+				aImg[0].src = aUrl[0];
+				aImg[1].src = aUrl[1];
+				oH2.innerHTML = aTxt[0][0];
+				oSpan.innerHTML = aTxt[1][0];
+				
+				//无缝滚动(按顺序无限循环)
+				function scroll(){
+					timer = setTimeout(function (){
+						doMove(oDd,'bottom',10,0,function (){
+							timer = setTimeout(function (){
+								doMove(oDd,'bottom',10,-80,function (){
+									doMove(onOff ? oA1 : oA2,'left',15,-500);
+									doMove(onOff ? oA2 : oA1,'left',15,0,function (){
+										(onOff ? oA1 : oA2).style.left = 500 + 'px';
+										aImg[onOff ? 0 : 1].src = aUrl[(num+2)%len];
+										oH2.innerHTML = aTxt[0][(num+1)%len];
+										oSpan.innerHTML = aTxt[1][(num+1)%len];
+										onOff = !onOff;
+										num ++;
+										scroll();
+									});
+								});
+							},2500);
+						});
+					},14);
+				}
+				scroll();
+				
+				//鼠标移入停止，鼠标移出启动
+				$('@dl')[0].onmouseover = function (){
+					clearTimeout(timer);
+				};
+				$('@dl')[0].onmouseout = function (){
+					scroll();
+				};
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<dl>
+				<dt>
+					<a id="a1" href="#"><img src="" alt="" /></a>
+					<a id="a2" href="#"><img src="" alt="" /></a>
+				</dt>
+				<dd>
+					<h2></h2>
+					<span></span>
+				</dd>
+			</dl>
+		</div>
+	</body>
+</html>

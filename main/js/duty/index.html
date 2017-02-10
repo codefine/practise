@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>职位信息</title>
+		<link rel="stylesheet" type="text/css" href="css.css"/>
+		<script type="text/javascript" src="data.js"></script>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oContainer = document.getElementById('container');
+				var oHeader = document.getElementById('header');
+				var oList = document.getElementById('listContent');
+				var oTip = document.getElementById('tips');
+				var oArrow = document.getElementById('arrow');
+				var oTipsContent = document.getElementById('tipsContent');
+				
+				//初始化
+				for (var i=0; i<data.length; i++) {
+					var oLi = document.createElement('li');
+					oLi.innerHTML = data[i].name;
+					oHeader.appendChild(oLi);
+				}
+				oHeader.children[0].className = 'focus';
+				main(0);
+				
+				//页眉标签鼠标移入切换页面内容
+				for (var i=0; i<oHeader.children.length; i++) {
+					oHeader.children[i].index = i;
+					oHeader.children[i].onmouseover = function (){
+						for (var i=0; i<oHeader.children.length; i++) {
+							oHeader.children[i].className = '';
+						}
+						this.className = 'focus';
+						main(this.index);
+					};
+				}
+				
+				function main(num){
+					if (oList.children.length==1) oList.removeChild(oList.children[0]);
+					var oUl = document.createElement('ul');
+					oUl.className = 'list';
+					for (var i=0; i<data[num].list.length; i++) {
+						var oA = document.createElement('a');
+						oA.innerHTML = data[num].list[i].title;
+						oA.href = 'javascript:;';
+						oA.index = i;
+						//鼠标移入a标签弹窗
+						oA.onmouseover = function (){
+							//先清空弹窗中的所有内容
+							if (oTipsContent.children.length==1) oTipsContent.removeChild(oTipsContent.children[0]);
+							//动态生成弹窗中的内容
+							oUl = document.createElement('ul');
+							for (var i in data[num].list[this.index]) {
+								oLi = document.createElement('li');
+								oLi.innerHTML = data[num].list[this.index][i];
+								oLi.className = 'col';
+								oUl.appendChild(oLi);
+							}
+							oTipsContent.appendChild(oUl);
+							//弹窗样式
+							oTip.style.display = 'block';
+							oTip.style.left = this.clientWidth + oContainer.offsetLeft + 10 + 'px';
+							oTip.style.top = getTop(this) - oTip.clientHeight/2 + 6 + 'px';
+							//箭头指向a标签
+							oArrow.style.top = oTip.offsetHeight/2 + 'px';
+							//如果为页面底部的a标签，则判断弹窗的显示位置，使弹窗内容完全可视
+							if (oTip.offsetTop>document.documentElement.clientHeight-oTip.offsetHeight) {
+								oTip.style.top = document.documentElement.clientHeight-oTip.offsetHeight + 'px';
+								//使箭头在底部也能完全对准a标签
+								oArrow.style.top = getTop(this) - oTip.offsetTop + 6 + 'px';
+							}
+						};
+						//鼠标移出a标签隐藏
+						oA.onmouseout = function (){
+							oTip.style.display = 'none';
+						};
+						var oSpan = document.createElement('span');
+						oSpan.innerHTML = data[0].list[i].addDate;
+						oSpan.className = 'date';
+						oLi = document.createElement('li');
+						oLi.appendChild(oSpan);
+						oLi.appendChild(oA);
+						oUl.appendChild(oLi);
+					}
+					oList.appendChild(oUl);
+				}
+				
+				//绕过一切定位父级，指向html的offsetTop函数
+				function getTop(obj){
+					var _top = 0;
+					while (obj) {
+						_top += obj.offsetTop;
+						obj = obj.offsetParent;
+					}
+					return _top;
+				}
+				
+			};
+		</script>
+	</head>
+	<body>
+		<div id="container">
+			<ul id="header"></ul>
+			<div id="listContent"></div>
+		</div>
+		<div id="tips">
+			<span id="arrow"></span>
+	        <div id="tipsContent"></div>
+		</div>
+	</body>
+</html>

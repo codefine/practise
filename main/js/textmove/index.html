@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>文字搬家</title>
+		<style type="text/css">
+			textarea, ul, p, input{
+				padding: 0;
+				margin: 0;
+			}
+			strong{
+				font-weight: normal;
+			}
+			li{
+				list-style: none;
+			}
+			textarea, input{
+				border: none;
+				outline: none;
+				overflow: auto;
+				resize: none;
+			}
+			.box{
+				width: 800px;
+				height: 300px;
+				border: 10px solid #ccc;
+				overflow: hidden;
+			}
+			.box:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			.box div{
+				height: 100%;
+				padding: 10px;
+				float: left;
+				font-family: "微软雅黑";
+			}
+			.orig, .show{
+				width: 300px;
+				font-size: 16px;
+				line-height: 24px;
+				font-weight: normal;
+			}
+			.orig{
+				background: #E4FFFF;
+			}
+			.orig textarea{
+				display: block;
+				height: 100%;
+				width: 100%;
+				background: #E4FFFF;
+				font-size: 16px;
+				line-height: 24px;
+			}
+			.mid{
+				width: 140px;
+				text-align: center;
+				font-size: 16px;
+				
+			}
+			.mid input{
+				margin-top: 80px;
+				background: #000;
+				padding: 6px 20px;
+				color: red;
+				font-size: 16px;
+				line-height: 40px;
+				opacity: 1;
+				filter: alpha(opacity:100);
+			}
+			.mid p{
+				line-height: 40px;
+			}
+			.mid ul{
+				opacity: 0;
+				filter: alpha(opacity:0);
+			}
+			.mid li{
+				float: left;
+				color: #ccc;
+				font-weight: bold;
+				margin: 0 2px;
+			}
+			.show{
+				background: lemonchiffon;
+			}
+			.mid .active{
+				color: red;
+			}
+		</style>
+		<script type="text/javascript" src="codefine.js"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var str = '福克斯电视台3日晚播出的这档名为“奥莱利实情”的节目中，主持人杰西·沃特斯在纽约唐人街采访时，用夸张的语言，配以特技剪辑，对华人进行种族形象定性，并有意无意将华人同“小偷”“英语差”“对政治冷漠”等负面形象联系起来。短片在脸书、推特、微信等社交媒体传播开后引发各界强烈不满。《纽约时报》、《纽约客》、美国有线电视新闻网、美联社、哥伦比亚广播公司等美国主要媒体均对这一事件进行谴责。';
+				
+				var oTxt = $('@textarea')[0];
+				var oUl = $('@ul')[0];
+				var aLi = $('@li');
+				var oInp = $('@input')[0];
+				var aSpan = $('@span');
+				var oShow = $('@div')[3];
+				var timer = null;
+				var num = 0;
+				var onOff = true;
+				
+				oTxt.value = str;
+				
+				oInp.onclick = function (){
+					if (oTxt.value==='') {
+						alert('请输入内容');
+						return;
+					}
+					if (onOff===false) return;
+					onOff = false;
+					aSpan[1].innerHTML = oTxt.value.length;
+					opacity(oUl,50,100,function (){
+						opacity(oInp,10,50);
+						timer = setInterval(function (){
+							for (var i=0; i<aLi.length; i++) {
+								aLi[i].className = '';
+							}
+							aLi[num%aLi.length].className = 'active';
+							num ++;
+							oShow.innerHTML += oTxt.value.charAt(0);
+							aSpan[0].innerHTML = oShow.innerHTML.length;
+							oTxt.value = oTxt.value.substring(1,oTxt.value.length);
+							if (oTxt.value==='') {
+								opacity(oInp,10,100);
+								opacity(oUl,20,0,function (){
+									num = 0;
+									onOff = true;
+									for (var i=0; i<aLi.length; i++) {
+										aLi[i].className = '';
+									}
+								});
+								clearInterval(timer);
+							}
+						},30);
+					});
+						
+				};
+				
+			})
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<div class="orig">
+				<textarea></textarea>
+			</div>
+			<div class="mid">
+				<input type="button" value="把内容右移"/>
+				<p>
+					<span>0</span>
+					<strong>/</strong>
+					<span>0</span>
+				</p>
+				<ul>
+					<li>></li>
+					<li>></li>
+					<li>></li>
+					<li>></li>
+					<li>></li>
+					<li>></li>
+					<li>></li>
+					<li>></li>
+					<li>></li>
+					<li>></li>
+				</ul>
+			</div>
+			<div class="show"></div>
+		</div>
+	</body>
+</html>

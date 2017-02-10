@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>轮播选项卡</title>
+		<style type="text/css">
+			.box{
+				width: 298px;
+				height: 218px;
+				border: 1px solid #ff6300;
+				position: relative;
+			}
+			img{
+				width: 188px;
+				height: 208px;
+				position: absolute;
+				left: 55px;
+				top: 5px;
+			}
+			ul{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				width: 48px;
+				height: 26px;
+				border: 1px solid #ffadad;
+				background: url(img/li_bg.png);
+				font-size: 12px;
+				line-height: 26px;
+				text-align: center;
+				color: #000;
+				list-style: none;
+				position: absolute;
+				cursor: pointer;
+			}
+			.active{
+				background: url(img/li_hover_bg.png);
+				color: #fff;
+			}
+		</style>
+		<script src="codefine.js"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var aTxt = ['连衣裙', '雪纺', 'T恤', '铅笔裤', '婚纱', '外套', '连体裤', '包包', '凉鞋', '单鞋', '太阳镜', '丝袜', '帆布鞋', '情侣装']
+				var aUrl = [];
+				var str = '';
+				var oldLi = null;
+				var timer = null;
+				var num = 0;
+				
+				//初始化
+				//生成li及图片地址数组
+				for (var i=0; i<aTxt.length; i++) {
+					aUrl.push('img/'+(i+1)+'.jpg');
+					str += '<li>'+aTxt[i]+'</li>';
+				}
+				$('@ul')[0].innerHTML = str;
+				//生成li布局
+				for (var i=0; i<aTxt.length; i++) {
+					if (i<aTxt.length/2) {
+						$('@li')[i].style.left = 4 + 'px';
+					} else {
+						$('@li')[i].style.right = 4 + 'px';
+					}
+					$('@li')[i].style.top = 4 + i%7*30 + 'px';
+				}
+				//初始化
+				$('@img')[0].src = aUrl[0];
+				$('@li')[0].className = 'active';
+				oldLi = $('@li')[0];
+				start();
+				
+				//鼠标移入li生成对应的图片和active
+				for (var i=0; i<aTxt.length; i++) {
+					$('@li')[i].index = i;
+					$('@li')[i].onmouseover = function (){
+//						num = this.index-1; //正常版
+						oldLi.className = '';
+						tab(this.index);
+					};
+				}
+				
+				//鼠标移入ul停止定时器
+				$('@div')[0].onmouseover = function (){
+					clearTimeout(timer);
+					clearInterval(timer);
+				};
+				//鼠标移出ul开始定时器
+				$('@div')[0].onmouseout = function (){
+					start();
+				};
+				
+				//函数封装区
+				function start(){
+					timer = setTimeout(function (){
+						timer = setInterval(function (){
+							num ++;
+							oldLi.className = '';
+							//逆序返回版
+							if (num>=0&&num<aTxt.length/2) {
+								tab(num);
+							} else if (num>=aTxt.length/2&&num<aTxt.length) {
+								tab(aTxt.length+6-num);
+							} else if (num>=aTxt.length&&num<1.5*aTxt.length-1) {
+								tab(num-6);
+							} else if (num>=1.5*aTxt.length-1&&num<2*aTxt.length-1) {
+								tab(aTxt.length+12-num);
+							} else if (num==2*aTxt.length-1) {
+								num = 1;
+								tab(num);
+							}
+//							//正常版
+//							tab(num);
+//							if (num==aTxt.length-1) {
+//								num = -1;
+//							}
+						},1000)
+					},1000)
+				}
+				
+				//li及图片切换
+				function tab(num){
+					$('@img')[0].src = aUrl[num];
+					$('@li')[num].className = 'active';
+					oldLi = $('@li')[num];
+				}
+				
+			})
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<img src="img/loader_ico.gif" alt="" />
+			<ul></ul>
+		</div>
+	</body>
+</html>

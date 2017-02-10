@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>滚动条</title>
+		<style type="text/css">
+			body, ul, h2{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			a{
+				text-decoration: none;
+			}
+			.box{
+				width: 240px;
+				height: 600px;
+				background: #ccc;
+				position: relative;
+				overflow: hidden;
+			}
+			.title{
+				height: 40px;
+				background: #5A94EF;
+				line-height: 40px;
+				position: relative;
+				z-index: 1;
+			}
+			.title h2{
+				color: #CCCCCC;
+				float: left;
+				font-size: 20px;
+				padding-left: 20px;
+			}
+			.title a{
+				float: right;
+				font-size: 16px;
+				color: #CCCCCC;
+				padding-right: 20px;
+			}
+			ul{
+				width: 100%;
+				position: absolute;
+				top: 70px;
+				left: 0;
+				z-index: 0;
+			}
+			li{
+				height: 100px;
+				font-size: 50px;
+				line-height: 100px;
+				font-weight: bold;
+				text-align: center;
+				color: #ccc;
+			}
+			span{
+				display: block;
+				width: 100%;
+				height: 30px;
+				font-size: 20px;
+				line-height: 30px;
+				text-align: center;
+				background: #E4FFFF;
+				position: absolute;
+				left: 0;
+				-moz-user-select: none; 
+				-webkit-user-select: none; 
+				-ms-user-select: none; 
+				-khtml-user-select: none; 
+				user-select: none; 
+				cursor: pointer;
+			}
+			span:active{
+				background: #FFFF99;
+			}
+			.up{
+				top: 40px;
+			}
+			.down{
+				bottom: 0;
+			}
+		</style>
+		<script src="codefine.js"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var aColor = ['red', 'pink', 'black', 'white', '#F3396E' ]
+				var str = '';
+				var num = 0;
+				var timer = null;
+				
+				//初始化
+				//生成li
+				for (var i=0; i<aColor.length*2; i++) {
+					str += '<li style="background: '+ aColor[i%aColor.length] +'">'+i+'</li>';
+				}
+				$('@ul')[0].innerHTML = str;
+				
+				//执行函数(该函数已使用函数传参和return返回值)
+				for (var i=0; i<2; i++) {
+					direction(i);
+				}
+				
+				//函数封装区
+				//上下边界
+				function border(side){
+					switch (side) {
+						//上边界=第一个li的起始top值-li的高度*li的个数+(ul的可视高度)
+						case 0: return 70 - 100*$('@li').length + (600 - 40 - 30*2);
+						//下边界=第一个li的起始top值
+						case 1: return 70;
+					}
+				}
+				
+				//递增or递减
+				function numX(riseDrop){
+					switch (riseDrop) {
+						case 0: return num ++; break;
+						case 1: return num --; break;
+					}
+				}
+				
+				//定时器封装(核心主程序)
+				function direction(index){
+					$('@span')[index].onmousedown = function (){
+						if (getStyle($('@ul')[0],'top','number')==border(index)) {
+							clearInterval(timer);
+						} else {
+							timer = setInterval(function (){
+								numX(index);
+								$('@ul')[0].style.top = 70 - num*4 + 'px';
+								if (getStyle($('@ul')[0],'top','number')==border(index)) {
+									clearInterval(timer);
+								}
+							},14)
+						}	
+					};
+					$('@span')[index].onmouseup = function (){
+						clearInterval(timer);
+					}
+				}
+				
+			})
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<div class="title">
+				<h2>滚动展示</h2>
+				<a href="">more</a>
+			</div>
+			<ul></ul>
+			<span class="up">&uarr;</span>
+			<span class="down">&darr;</span>
+		</div>
+	</body>
+</html>

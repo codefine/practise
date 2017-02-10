@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Canvas时钟</title>
+		<style type="text/css">
+			canvas{
+				border: 1px solid #000;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oC = document.querySelector('#mainCanv');
+				var oGC = oC.getContext('2d');
+				var x = 200;
+				var y = 200;
+				
+				startTime();
+				
+				function startTime(){
+					
+					//表盘&&分秒刻度
+					oGC.lineWidth = 1;
+					for (var i=0; i<60; i++) {
+						drawArc(150,i*6,(i+1)*6);
+					}
+					drawArc(145,0,360,true);
+					
+					//小时刻度
+					oGC.lineWidth = 2;
+					for (var i=0; i<12; i++) {
+						drawArc(150,i*30,(i+1)*30);
+					}
+					drawArc(140,0,360,true);
+					
+					//秒针
+					drawHand(getTime().sec,3,130,'red');
+					//分针
+					drawHand(getTime().min,4,100,'blue');
+					//时针
+					drawHand(getTime().hour,5,60,'green');
+					
+					setInterval(function (){
+						drawArc(130,0,360,true);
+						drawHand(getTime().sec,3,130,'red');
+						drawHand(getTime().min,4,100,'blue');
+						drawHand(getTime().hour,5,60,'green');
+					},1000);
+					
+				}
+				
+				function drawArc(iRadius,iBeginAngle,iEndAngle,ifClear){
+					
+					var beginRadian = iBeginAngle*Math.PI/180;
+					var endRadian = iEndAngle*Math.PI/180;
+					
+					oGC.beginPath();
+					oGC.moveTo(x,y);
+					oGC.arc(x,y,iRadius,beginRadian,endRadian,false);
+					!ifClear && oGC.stroke();
+					
+					if (ifClear) {
+						oGC.fillStyle = 'white';
+						oGC.fill();
+					}
+					
+				}
+				
+				function drawHand(iAngle,iWidth,iLength,iColor){
+					
+					oGC.save();
+					oGC.lineWidth = iWidth;
+					oGC.strokeStyle = iColor;
+					drawArc(iLength,iAngle,iAngle);
+					oGC.restore();
+					
+				}
+				
+				function getTime(){
+					
+					var jTime = {};
+					var iNow = new Date();
+					jTime.sec = -90 + iNow.getSeconds()*6;
+					jTime.min = -90 + iNow.getMinutes()*6 + jTime.sec/60;
+					jTime.hour = -90 + iNow.getHours()*30 + jTime.min/60;
+					
+					return jTime;
+					
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+		<canvas id="mainCanv" width="400" height="400"></canvas>
+	</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>二级选项卡</title>
+		<style type="text/css">
+			body, ul, dl, dd{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			a{
+				text-decoration: none;
+			}
+			img{
+				border: none;
+				vertical-align: top;
+			}
+			#box{
+				width: 1080px;
+				margin: 100px auto;
+				padding: 4px;
+				background: #c1c1c1;
+				font-family: "微软雅黑", 'arial';
+			}
+			#box:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			#brands{
+				width: 140px;
+				padding-right: 4px;
+				float: left;
+			}
+			#brands li{
+				height: 76px;
+				font-size: 20px;
+				line-height: 76px;
+				text-align: center;
+				font-weight: bold;
+				color: #000;
+				background: #fec300;
+				cursor: pointer;
+			}
+			#brands li:hover, #brands .actLi{
+				color: #fec300;
+				background: #000;
+			}
+			#goods{
+				width: 936px;
+				height: 304px;
+				float: left;
+				position: relative;
+			}
+			#goods dt{}
+			#goods dt img{
+				width: 936px;
+				height: 304px;
+			}
+			#goods dd{
+				width: 936px;
+				/*display:-moz-box;   IE不兼容
+			    display:-webkit-box;  IE不兼容
+			    display:box;          IE不兼容 */  
+				height: 20px;
+				line-height: 20px;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				font-size: 0;
+			}
+			#goods span{
+				height: 20px;
+				border-right: 1px solid #fff;
+				display: inline-block;
+				*display: inline;
+				*zoom: 1;
+				/*-moz-box-flex:1;    IE不兼容
+			    -webkit-box-flex:1;   IE不兼容
+			    box-flex:1;           IE不兼容 */        
+				background: #000;
+				color: #fff;
+				font-size: 12px;
+				text-align: center;
+				filter: alpha(opacity: 50);
+				opacity: 0.5;
+				cursor: pointer;
+			}
+			#goods span:hover, #goods .actSpan{
+				filter: alpha(opacity: 100);
+				opacity: 1;
+				background: #f3396e;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function (){
+				
+				var oBrand = document.getElementById('brands');
+				var aLi = oBrand.getElementsByTagName('li');
+				var oGood = document.getElementById('goods');
+				var oDd = oGood.getElementsByTagName('dd')[0];
+				var aSpan = oDd.getElementsByTagName('span');
+				var oImg = document.getElementsByTagName('img')[0];
+				var aUrl = [['img/only_1.jpg', 'img/only_2.jpg', 'img/only_3.jpg', 'img/only_4.jpg', 'img/only_5.jpg'], ['img/fairwhale_1.jpg', 'img/fairwhale_2.jpg', 'img/fairwhale_3.jpg', 'img/fairwhale_4.jpg'], ['img/tissot_1.jpg', 'img/tissot_2.jpg', 'img/tissot_3.jpg'], ['img/swarovski_1.jpg', 'img/swarovski_2.jpg']];
+				var aTxt = [['修身小脚微弹拉链牛仔裤', '宽松撞色两件套条纹连衣裙', '宽松字母装饰高领不规则毛衣', '含棉修身高腰SS牛仔裤', '含棉修身拉链装饰SS牛仔裤'], ['长袖休闲卫衣新品', '长袖休闲T恤爆款', '夹克外套', '韩版休闲牛仔裤'], ['库图系列', '力洛克系列', '经典力洛克系列'], ['玫瑰金四叶草', '水晶玫瑰金天鹅']];
+				
+				//1⃣初始化
+				function liCtrl(index){
+					
+					//图片地址
+					oImg.src = aUrl[index][0];
+					//生成图片下方对应的小标签，小标签高亮
+					var str = '';
+					for (var i=0; i<aUrl[index].length; i++) {
+						str += '<span>'+aTxt[index][i]+'</span>';
+					}
+					oDd.innerHTML = str;
+					aSpan[0].className = 'actSpan';
+					//小标签宽度自适应(如果宽度是小数，则ie6、ie7会进行元整，无法解决)
+					for (var i=0; i<aUrl[index].length; i++) {
+						aSpan[i].style.width = (936-aUrl[index].length+1)/aUrl[index].length + 'px';
+					}
+					aSpan[aUrl[index].length-1].style.borderRight = 'none'; 
+					//设置当前标签高亮显示
+					for (var i=0; i<aLi.length; i++) {
+						aLi[i].className = '';
+					}
+					aLi[index].className = 'actLi';
+					
+				};
+				liCtrl(0);
+				spanCtrl(0);
+				
+				//2⃣核心主程序
+				//左侧标签切换
+				for (var i=0; i<aLi.length; i++) {
+					aLi[i].indexLi = i;
+					aLi[i].onmouseover = function (){
+						liCtrl(this.indexLi);
+						spanCtrl(this.indexLi);
+					};
+				};
+				
+				//图片底部小标签控制图片地址
+				function spanCtrl(num){
+					
+					for (var i=0; i<aSpan.length; i++) {
+						aSpan[i].indexSpan = i;
+						aSpan[i].onmouseover = function (){
+							oImg.src = aUrl[num][this.indexSpan];
+							for (var i=0; i<aSpan.length; i++) {
+								aSpan[i].className = '';
+								aSpan[aUrl[num].length-1].style.borderRight = 'none';
+							}
+							this.className = 'actSpan';
+						};
+					}
+					
+				};
+				
+			};
+		</script>
+	</head>
+	<body>
+		<div id="box">
+			<ul id="brands">
+				<li class="on">ONLY</li>
+				<li class="fa">FAIRWHALE</li>
+				<li class="ti">TISSOT</li>
+				<li class="sw">SWAROVSKI</li>
+			</ul>
+			<dl id="goods">
+				<dt>
+					<a href="">
+						<img src="" alt="" />
+					</a>
+				</dt>
+				<dd></dd>
+			</dl>
+		</div>
+	</body>
+</html>

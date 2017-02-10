@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>焦点轮播图</title>
+		<style type="text/css">
+			body{
+				margin: 0;
+			}
+			img{
+				border: none;
+				vertical-align: top;
+			}
+			#tab{
+				width: 600px;
+				padding: 10px;
+				border: 2px solid #000000;
+				position: relative;
+				background: #ccc;
+			}
+			#main{
+				width: 600px;
+				height: 338px;
+			}
+			#pos{
+				margin: 5px auto 0;
+				width: 520px;
+				height: 56px;
+				position: relative;
+				overflow: hidden;
+			}
+			#container{
+				font-size: 0;
+				width: 624px;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			#container img{
+				width: 100px;
+				height: 56px;
+				margin: 2px;
+			}
+			#foc{
+				width: 100px;
+				height: 54px;
+				border: 2px solid red;
+				position: absolute;
+				left: 50px;
+				top: 353px;
+			}
+			a{
+				text-decoration: none;
+				color: #fff;
+				background: #000;
+				width: 30px;
+				height: 30px;
+				display: block;
+				text-align: center;
+				line-height: 30px;
+				font-size: 20px;
+				font-weight: bold;
+				position: absolute;
+				top: 368px;
+			}
+			#left{
+				left: 14px;
+			}
+			#right{
+				right: 14px;
+			}
+		</style>
+		<script src="jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function (){
+				
+				var _this = $('#container>img:first');
+				var onOff = true;
+				
+				//选中任意图片切换
+				$('#container').delegate('img','click',function (){
+					_this = $(this);
+					$('#main').fadeOut('fast',function (){
+						$(this).attr('src',_this.attr('src'));
+						$(this).fadeIn('fast');
+					})
+					$('#foc').animate({'left':50+_this.position().left});
+				})
+				
+				
+				$('a').click(function (){
+					tab($(this).attr('id'));
+				})
+				
+				//左右轮播无缝切换
+				function tab(dis){
+					if (onOff) {
+						if ((dis=='right'?_this.next():_this.prev()).length==0) {
+							if (dis=='right') {
+								$('#container>img:first').clone().appendTo($('#container'));
+							} else {
+								$('#container>img:last').clone().prependTo($('#container'));
+							}
+							$('#container').css('left',dis=='right'?0:-104);
+						}
+						_this = (dis=='right'?_this.next():_this.prev());
+						$('#main').fadeOut('fast',function (){
+							$(this).attr('src',_this.attr('src'));
+							$(this).fadeIn('fast',function (){
+								onOff = true;
+							});
+						})
+						if ($('#container>img').length==6) {
+							$('#container').animate({'left':dis=='right'?-104:0},function (){
+								$('#container>img:'+(dis=='right'?'first':'last')+'').remove();
+								$('#container').css('left',0);
+							});
+						} else {
+							$('#foc').animate({'left':50+_this.position().left});
+						}
+					}
+					onOff = false;
+				}
+				
+			})
+		</script>
+	</head>
+	<body>
+		<div id="tab">
+			<img id="main" src="img/1.jpg" alt="" />
+			<div id="pos">
+				<div id="container">
+					<img src="img/1.jpg" alt="" />
+					<img src="img/2.jpg" alt="" />
+					<img src="img/3.jpg" alt="" />
+					<img src="img/4.jpg" alt="" />
+					<img src="img/5.jpg" alt="" />
+				</div>
+			</div>
+			<div id="foc"></div>
+			<a id="left" href="javascript:;"><</a>
+			<a id="right" href="javascript:;">></a>
+		</div>
+	</body>
+</html>
